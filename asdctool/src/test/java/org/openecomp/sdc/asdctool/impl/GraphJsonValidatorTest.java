@@ -26,6 +26,7 @@ import java.nio.file.NoSuchFileException;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GraphJsonValidatorTest {
 
@@ -55,12 +56,14 @@ public class GraphJsonValidatorTest {
 		assertFalse(result);
 	}
 	
-	@Test(expected=NoSuchFileException.class)
+	@Test
 	public void testVerifyJanusGraphJsonNoFile() throws Exception {
-		GraphJsonValidator testSubject;
+		assertThrows(NoSuchFileException.class, () -> {
+			GraphJsonValidator testSubject;
 
-		// default test
-		testSubject = createTestSubject();
-		testSubject.verifyJanusGraphJson("stam");
+			// default test
+			testSubject = createTestSubject();
+			testSubject.verifyJanusGraphJson("stam");
+		});
 	}
 }

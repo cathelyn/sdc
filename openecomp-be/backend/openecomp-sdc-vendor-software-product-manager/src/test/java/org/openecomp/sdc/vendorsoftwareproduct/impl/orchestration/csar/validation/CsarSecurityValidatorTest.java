@@ -22,6 +22,7 @@ package org.openecomp.sdc.vendorsoftwareproduct.impl.orchestration.csar.validati
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -62,14 +63,16 @@ public class CsarSecurityValidatorTest {
         assertThat("Signature should be valid", isSignatureValid, is(true));
     }
 
-    @Test(expected = SecurityManagerException.class)
+    @Test
     public void isSignatureValidTestCorrectStructureAndNotValidSignatureExists() throws SecurityManagerException {
-        final byte[] packageBytes = getFileBytesOrFail("signing/signed-package-tampered-data.zip");
-        final OnboardSignedPackage onboardSignedPackage = loadSignedPackage("signed-package-tampered-data.zip",
-            packageBytes);
-        //no mocked securityManager
-        csarSecurityValidator = new CsarSecurityValidator();
-        csarSecurityValidator.verifyPackageSignature(onboardSignedPackage);
+        assertThrows(SecurityManagerException.class, () -> {
+            final byte[] packageBytes = getFileBytesOrFail("signing/signed-package-tampered-data.zip");
+            final OnboardSignedPackage onboardSignedPackage = loadSignedPackage("signed-package-tampered-data.zip",
+                    packageBytes);
+            //no mocked securityManager
+            csarSecurityValidator = new CsarSecurityValidator();
+            csarSecurityValidator.verifyPackageSignature(onboardSignedPackage);
+        });
     }
 
     private byte[] getFileBytesOrFail(final String path) {

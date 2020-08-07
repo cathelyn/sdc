@@ -18,6 +18,7 @@ package org.openecomp.sdc.logging.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Field;
 import org.junit.Test;
@@ -54,14 +55,18 @@ public class LoggerFactoryTest {
         verifyLoggerWorks(logger);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void throwNpeWhenGetByNameWithNull() {
-        LoggerFactory.getLogger((String) null);
+    @Test
+    public void throwNpeWhenGetByNameWithNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            LoggerFactory.getLogger((String) null);
+        });
     }
 
-    @Test(expected = NullPointerException.class)
-    public void throwNpeWhenGetByClassWithNull() {
-        LoggerFactory.getLogger((Class<LoggerFactoryTest>) null);
+    @Test
+    public void throwNpeWhenGetByClassWithNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            LoggerFactory.getLogger((Class<LoggerFactoryTest>) null);
+        });
     }
 
     private void verifyLoggerWorks(Logger logger) {

@@ -34,6 +34,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -76,12 +77,14 @@ public class EnrichedServiceTemplateEntityTest {
         assertArrayEquals(IOUtils.toByteArray(serviceTemplate.getContent()), IOUtils.toByteArray(actual.getContent()));
     }
 
-    @Test(expected = SdcRuntimeException.class)
-    public void shouldFailOnNullContentBytesSupplied() {
-        ServiceTemplate serviceTemplateMock = mock(ServiceTemplate.class);
-        given(serviceTemplateMock.getContent()).willAnswer(invocation -> { throw new IOException("Test exception"); } );
-        EnrichedServiceTemplateEntity entity =
-                new EnrichedServiceTemplateEntity(serviceTemplateMock);
+    @Test
+    public void shouldFailOnNullContentBytesSupplied() throws Exception {
+        assertThrows(SdcRuntimeException.class, () -> {
+            ServiceTemplate serviceTemplateMock = mock(ServiceTemplate.class);
+            given(serviceTemplateMock.getContent()).willAnswer(invocation -> { throw new IOException("Test exception"); } );
+            EnrichedServiceTemplateEntity entity =
+                    new EnrichedServiceTemplateEntity(serviceTemplateMock);
+        });
     }
 
     private static ServiceTemplate createServiceTemplate() {

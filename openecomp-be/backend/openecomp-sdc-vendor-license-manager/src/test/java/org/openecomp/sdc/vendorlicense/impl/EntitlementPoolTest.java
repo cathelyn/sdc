@@ -19,6 +19,7 @@ package org.openecomp.sdc.vendorlicense.impl;
 
 import org.junit.After;
 import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -137,68 +138,69 @@ public class EntitlementPoolTest {
   }
 
 
-  @Test(expected = CoreException.class)
-  public void createWithInvalidStartExpiryDateTest() {
-
-    Set<OperationalScope> opScopeChoices;
-    opScopeChoices = new HashSet<>();
-    opScopeChoices.add(OperationalScope.Core);
-    opScopeChoices.add(OperationalScope.CPU);
-    opScopeChoices.add(OperationalScope.Network_Wide);
-    EntitlementPoolEntity ep2 =
-        createEntitlementPool("vlm2Id", null, ep1_id, EP1_NAME, "EP2 dec", 70,
-            ThresholdUnit.Absolute, EntitlementPoolType.Unique,
-                EntitlementMetric.Other, "exception metric2", "inc2", AggregationFunction.Average, null,
-            opScopeChoices, null, EntitlementTime.Other, "time2", "sku2");
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-    ep2.setStartDate(LocalDate.now().format(formatter));
-    ep2.setExpiryDate(LocalDate.now().minusDays(2L).format(formatter));
-    ep2.setVendorLicenseModelId(vlm1_id);
-    vendorLicenseManagerImpl.createEntitlementPool(ep2).getId();
-    Assert.fail("Vendor license model with id vlm1_id has invalid date range.");
-
+  @Test
+  public void createWithInvalidStartExpiryDateTest() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      Set<OperationalScope> opScopeChoices;
+      opScopeChoices = new HashSet<>();
+      opScopeChoices.add(OperationalScope.Core);
+      opScopeChoices.add(OperationalScope.CPU);
+      opScopeChoices.add(OperationalScope.Network_Wide);
+      EntitlementPoolEntity ep2 =
+              createEntitlementPool("vlm2Id", null, ep1_id, EP1_NAME, "EP2 dec", 70,
+                      ThresholdUnit.Absolute, EntitlementPoolType.Unique,
+                      EntitlementMetric.Other, "exception metric2", "inc2", AggregationFunction.Average, null,
+                      opScopeChoices, null, EntitlementTime.Other, "time2", "sku2");
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+      ep2.setStartDate(LocalDate.now().format(formatter));
+      ep2.setExpiryDate(LocalDate.now().minusDays(2L).format(formatter));
+      ep2.setVendorLicenseModelId(vlm1_id);
+      vendorLicenseManagerImpl.createEntitlementPool(ep2).getId();
+      Assert.fail("Vendor license model with id vlm1_id has invalid date range.");
+    });
   }
 
-  @Test(expected = CoreException.class)
-  public void createWithoutStartDateTest() {
-
-    Set<OperationalScope> opScopeChoices;
-    opScopeChoices = new HashSet<>();
-    opScopeChoices.add(OperationalScope.Core);
-    opScopeChoices.add(OperationalScope.CPU);
-    opScopeChoices.add(OperationalScope.Network_Wide);
-    EntitlementPoolEntity ep2 =
-        createEntitlementPool("vlm3Id", null, ep1_id, EP1_NAME, "EP2 dec", 70,
-            ThresholdUnit.Absolute, EntitlementPoolType.Unique,
-                EntitlementMetric.Other, "exception metric2", "inc2", AggregationFunction.Average, null,
-            opScopeChoices, null, EntitlementTime.Other, "time2", "sku2");
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-    ep2.setExpiryDate(LocalDate.now().plusDays(2L).format(formatter));
-    ep2.setVendorLicenseModelId(vlm1_id);
-    vendorLicenseManagerImpl.createEntitlementPool(ep2).getId();
-    Assert.fail("Vendor license model with id vlm1_id has invalid date range.");
-
+  @Test
+  public void createWithoutStartDateTest() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      Set<OperationalScope> opScopeChoices;
+      opScopeChoices = new HashSet<>();
+      opScopeChoices.add(OperationalScope.Core);
+      opScopeChoices.add(OperationalScope.CPU);
+      opScopeChoices.add(OperationalScope.Network_Wide);
+      EntitlementPoolEntity ep2 =
+              createEntitlementPool("vlm3Id", null, ep1_id, EP1_NAME, "EP2 dec", 70,
+                      ThresholdUnit.Absolute, EntitlementPoolType.Unique,
+                      EntitlementMetric.Other, "exception metric2", "inc2", AggregationFunction.Average, null,
+                      opScopeChoices, null, EntitlementTime.Other, "time2", "sku2");
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+      ep2.setExpiryDate(LocalDate.now().plusDays(2L).format(formatter));
+      ep2.setVendorLicenseModelId(vlm1_id);
+      vendorLicenseManagerImpl.createEntitlementPool(ep2).getId();
+      Assert.fail("Vendor license model with id vlm1_id has invalid date range.");
+    });
   }
 
-  @Test(expected = CoreException.class)
-  public void createWithSameStartExpiryDateTest() {
-
-    Set<OperationalScope> opScopeChoices;
-    opScopeChoices = new HashSet<>();
-    opScopeChoices.add(OperationalScope.Core);
-    opScopeChoices.add(OperationalScope.CPU);
-    opScopeChoices.add(OperationalScope.Network_Wide);
-    EntitlementPoolEntity ep2 =
-        createEntitlementPool("vlm4Id", null, ep1_id, EP1_NAME, "EP2 dec", 70,
-            ThresholdUnit.Absolute, EntitlementPoolType.Unique,
-                EntitlementMetric.Other, "exception metric2", "inc2", AggregationFunction.Average, null,
-            opScopeChoices, null, EntitlementTime.Other, "time2", "sku2");
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-    ep2.setStartDate(LocalDate.now().format(formatter));
-    ep2.setExpiryDate(LocalDate.now().format(formatter));
-    ep2.setVendorLicenseModelId(vlm1_id);
-    vendorLicenseManagerImpl.createEntitlementPool(ep2).getId();
-    Assert.fail("Vendor license model with id vlm1_id has invalid date range.");
+  @Test
+  public void createWithSameStartExpiryDateTest() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      Set<OperationalScope> opScopeChoices;
+      opScopeChoices = new HashSet<>();
+      opScopeChoices.add(OperationalScope.Core);
+      opScopeChoices.add(OperationalScope.CPU);
+      opScopeChoices.add(OperationalScope.Network_Wide);
+      EntitlementPoolEntity ep2 =
+              createEntitlementPool("vlm4Id", null, ep1_id, EP1_NAME, "EP2 dec", 70,
+                      ThresholdUnit.Absolute, EntitlementPoolType.Unique,
+                      EntitlementMetric.Other, "exception metric2", "inc2", AggregationFunction.Average, null,
+                      opScopeChoices, null, EntitlementTime.Other, "time2", "sku2");
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+      ep2.setStartDate(LocalDate.now().format(formatter));
+      ep2.setExpiryDate(LocalDate.now().format(formatter));
+      ep2.setVendorLicenseModelId(vlm1_id);
+      vendorLicenseManagerImpl.createEntitlementPool(ep2).getId();
+      Assert.fail("Vendor license model with id vlm1_id has invalid date range.");
+    });
   }
 
   @Test
@@ -263,26 +265,26 @@ public class EntitlementPoolTest {
     vendorLicenseManagerImpl.updateEntitlementPool(ep2);
   }
 
-  @Test(expected = CoreException.class)
-  public void updateWithInvalidStartExpiryDateTest() {
-
-    Set<OperationalScope> opScopeChoices;
-    opScopeChoices = new HashSet<>();
-    opScopeChoices.add(OperationalScope.Core);
-    opScopeChoices.add(OperationalScope.CPU);
-    opScopeChoices.add(OperationalScope.Network_Wide);
-    EntitlementPoolEntity ep2 =
-        createEntitlementPool("vlm2Id", null, ep1_id, EP1_NAME, "EP2 dec", 70,
-            ThresholdUnit.Absolute, EntitlementPoolType.Unique,
-                EntitlementMetric.Other, "exception metric2", "inc2", AggregationFunction.Average, null,
-            opScopeChoices, null, EntitlementTime.Other, "time2", "sku2");
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-    ep2.setStartDate(LocalDate.now().format(formatter));
-    ep2.setExpiryDate(LocalDate.now().minusDays(2L).format(formatter));
-    ep2.setVendorLicenseModelId(vlm1_id);
-    vendorLicenseManagerImpl.updateEntitlementPool(ep2);
-    Assert.fail("Vendor license model with id vlm1_id has invalid date range.");
-
+  @Test
+  public void updateWithInvalidStartExpiryDateTest() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      Set<OperationalScope> opScopeChoices;
+      opScopeChoices = new HashSet<>();
+      opScopeChoices.add(OperationalScope.Core);
+      opScopeChoices.add(OperationalScope.CPU);
+      opScopeChoices.add(OperationalScope.Network_Wide);
+      EntitlementPoolEntity ep2 =
+              createEntitlementPool("vlm2Id", null, ep1_id, EP1_NAME, "EP2 dec", 70,
+                      ThresholdUnit.Absolute, EntitlementPoolType.Unique,
+                      EntitlementMetric.Other, "exception metric2", "inc2", AggregationFunction.Average, null,
+                      opScopeChoices, null, EntitlementTime.Other, "time2", "sku2");
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+      ep2.setStartDate(LocalDate.now().format(formatter));
+      ep2.setExpiryDate(LocalDate.now().minusDays(2L).format(formatter));
+      ep2.setVendorLicenseModelId(vlm1_id);
+      vendorLicenseManagerImpl.updateEntitlementPool(ep2);
+      Assert.fail("Vendor license model with id vlm1_id has invalid date range.");
+    });
   }
 
   @Test

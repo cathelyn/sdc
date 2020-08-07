@@ -25,6 +25,7 @@ import org.apache.tinkerpop.gremlin.structure.Element;
 import org.janusgraph.core.JanusGraph;
 import org.junit.Assert;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
@@ -89,27 +90,31 @@ public class UtilsTest {
 		Assert.assertEquals(true, result);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testSetProperties() throws Exception {
-		Element element = null;
-		Map<String, Object> properties = null;
+		assertThrows(IllegalArgumentException.class, () -> {
+			Element element = null;
+			Map<String, Object> properties = null;
 
-		// test 1
-		properties = null;
-		Utils.setProperties(element, properties);
-		
-		// test 2
-		properties = new HashMap<>();
-		properties.put("stam", new Object());
-		Utils.setProperties(element, properties);
+			// test 1
+			properties = null;
+			Utils.setProperties(element, properties);
+
+			// test 2
+			properties = new HashMap<>();
+			properties.put("stam", new Object());
+			Utils.setProperties(element, properties);
+		});
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test
 	public void testGetProperties() throws Exception {
-		Element element = null;
-		Map<String, Object> result;
+		assertThrows(NullPointerException.class, () -> {
+			Element element = null;
+			Map<String, Object> result;
 
-		// default test
-		result = Utils.getProperties(element);
+			// default test
+			result = Utils.getProperties(element);
+		});
 	}
 }

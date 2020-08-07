@@ -25,9 +25,11 @@ import org.mockito.MockitoAnnotations;
 import org.openecomp.core.dao.UniqueValueDao;
 import org.openecomp.core.dao.types.UniqueValueEntity;
 import org.openecomp.sdc.common.errors.CoreException;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;;
+import org.junit.jupiter.api.Test;
 
 public class UniqueValueUtilTest {
 
@@ -39,7 +41,7 @@ public class UniqueValueUtilTest {
 
     private UniqueValueUtil uniqueValueUtil;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         uniqueValueUtil = new UniqueValueUtil(uniqueValueDao);
@@ -53,13 +55,16 @@ public class UniqueValueUtilTest {
         Mockito.verify(uniqueValueDao, Mockito.times(1)).create(Mockito.any());
     }
 
-    @Test(expectedExceptions = CoreException.class)
-    public void testCreateUniqueValueNotUnique() {
-        Mockito.when(uniqueValueDao.get(Mockito.any())).thenReturn(new UniqueValueEntity());
-        uniqueValueUtil.createUniqueValue(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME);
+    @Test
+    public void testCreateUniqueValueNotUnique() throws Exception{
+        assertThrows(CoreException.class, () -> {
+            Mockito.when(uniqueValueDao.get(Mockito.any())).thenReturn(new UniqueValueEntity());
+            uniqueValueUtil.createUniqueValue(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME);
 
-        Mockito.verify(uniqueValueDao, Mockito.times(1)).create(Mockito.any());
+            Mockito.verify(uniqueValueDao, Mockito.times(1)).create(Mockito.any());
+        });
     }
+
 
     @Test
     public void testDeleteUniqueValue() {
@@ -94,23 +99,25 @@ public class UniqueValueUtilTest {
         Mockito.verify(uniqueValueDao, Mockito.times(1)).get(Mockito.any());
     }
 
-    @Test(expectedExceptions = CoreException.class)
-    public void testValidateUniqueValueNotUnique() {
-        Mockito.when(uniqueValueDao.get(Mockito.any())).thenReturn(new UniqueValueEntity());
-        uniqueValueUtil.createUniqueValue(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME);
+    @Test
+    public void testValidateUniqueValueNotUnique() throws Exception{
+        assertThrows(CoreException.class, () -> {
+            Mockito.when(uniqueValueDao.get(Mockito.any())).thenReturn(new UniqueValueEntity());
+            uniqueValueUtil.createUniqueValue(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME);
 
-        Mockito.verify(uniqueValueDao, Mockito.times(1)).get(Mockito.any());
+            Mockito.verify(uniqueValueDao, Mockito.times(1)).get(Mockito.any());
+        });
     }
 
     @Test
     public void testIsUniqueValueOccupied() {
         Mockito.when(uniqueValueDao.get(Mockito.any())).thenReturn(new UniqueValueEntity());
-        Assert.assertTrue(uniqueValueUtil.isUniqueValueOccupied(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME));
+        assertTrue(uniqueValueUtil.isUniqueValueOccupied(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME));
     }
 
     @Test
     public void testIsUniqueValueOccupiedFalse() {
         Mockito.when(uniqueValueDao.get(Mockito.any())).thenReturn(null);
-        Assert.assertFalse(uniqueValueUtil.isUniqueValueOccupied(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME));
+        assertFalse(uniqueValueUtil.isUniqueValueOccupied(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME));
     }
 }

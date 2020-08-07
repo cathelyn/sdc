@@ -22,6 +22,7 @@ package org.openecomp.sdc.vendorsoftwareproduct.impl;
 
 import org.junit.After;
 import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -75,20 +76,24 @@ public class MonitoringUploadsManagerImplTest {
     monitoringUploadsManager = null;
   }
 
-  @Test(expected = CoreException.class)
-  public void testUploadEmptyZip() {
-    processFile(ZIP_DIR + EMPTY_ZIP_FILE_NAME, inputStream ->
-        monitoringUploadsManager
-            .upload(inputStream, EMPTY_ZIP_FILE_NAME, VSP_ID, VERSION, COMPONENT_ID,
-                MonitoringUploadType.SNMP_TRAP));
+  @Test
+  public void testUploadEmptyZip() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      processFile(ZIP_DIR + EMPTY_ZIP_FILE_NAME, inputStream ->
+              monitoringUploadsManager
+                      .upload(inputStream, EMPTY_ZIP_FILE_NAME, VSP_ID, VERSION, COMPONENT_ID,
+                              MonitoringUploadType.SNMP_TRAP));
+    });
   }
 
-  @Test(expected = CoreException.class)
-  public void testUploadInvalidZip() {
-    processFile("/notZipFile", inputStream ->
-        monitoringUploadsManager
-            .upload(inputStream, NOT_ZIP_FILE_NAME, VSP_ID, VERSION, COMPONENT_ID,
-                MonitoringUploadType.VES_EVENTS));
+  @Test
+  public void testUploadInvalidZip() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      processFile("/notZipFile", inputStream ->
+              monitoringUploadsManager
+                      .upload(inputStream, NOT_ZIP_FILE_NAME, VSP_ID, VERSION, COMPONENT_ID,
+                              MonitoringUploadType.VES_EVENTS));
+    });
   }
 
   @Test
@@ -148,13 +153,15 @@ public class MonitoringUploadsManagerImplTest {
     Assert.assertEquals(monitoringUploadStatus.getVesEvent(), VES_FILE_NAME);
   }
 
-  @Test(expected = CoreException.class)
-  public void testDeleteComponentMibWhenNone() {
-    doReturn(Optional.empty()).when(componentArtifactDaoMock).getByType(any());
-    monitoringUploadsManager
-        .delete(VSP_ID, VERSION, COMPONENT_ID, MonitoringUploadType.SNMP_POLL);
+  @Test
+  public void testDeleteComponentMibWhenNone() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      doReturn(Optional.empty()).when(componentArtifactDaoMock).getByType(any());
+      monitoringUploadsManager
+              .delete(VSP_ID, VERSION, COMPONENT_ID, MonitoringUploadType.SNMP_POLL);
 
-    verify(componentArtifactDaoMock, never()).delete(any());
+      verify(componentArtifactDaoMock, never()).delete(any());
+    });
   }
 
   @Test

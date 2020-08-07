@@ -33,7 +33,7 @@ import org.openecomp.sdc.validation.ResourceValidator;
 import org.openecomp.sdc.validation.ValidationContext;
 import org.openecomp.sdc.validation.Validator;
 import org.openecomp.sdc.validation.base.ResourceBaseValidator;
-import org.testng.Assert;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -177,7 +177,7 @@ public class ValidationTestUtil {
 
   public static void validateErrorMessage(String actualMessage, String expected, String... params) {
 
-    Assert.assertEquals(actualMessage.replace("\n", "").replace("\r", ""),
+    assertEquals(actualMessage.replace("\n", "").replace("\r", ""),
             ErrorMessagesFormatBuilder.getErrorWithParameters(expected, params).replace("\n", "")
                                       .replace("\r", ""));
   }

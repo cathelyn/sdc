@@ -25,43 +25,51 @@ import org.openecomp.sdc.asdctool.enums.SchemaZipFileEnum;
 
 import java.nio.file.NoSuchFileException;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class SdcSchemaFileImportTest {
 
 	private SdcSchemaFileImport createTestSubject() {
 		return new SdcSchemaFileImport();
 	}
 
-	@Test(expected=NoSuchFileException.class)
+	@Test
 	public void testCreateAndSaveNodeSchemaFile() throws Exception {
-
-		// default test
-		SdcSchemaFileImport.createAndSaveNodeSchemaFile("");
+		assertThrows(NoSuchFileException.class, () -> {
+			// default test
+			SdcSchemaFileImport.createAndSaveNodeSchemaFile("");
+		});
 	}
 
-	@Test(expected=NoSuchFileException.class)
+	@Test
 	public void testCreateAndSaveNodeSchemaFileOnap() throws Exception {
-
-		// default test
-		SdcSchemaFileImport.createAndSaveNodeSchemaFile("onap");
+		assertThrows(NoSuchFileException.class, () -> {
+			// default test
+			SdcSchemaFileImport.createAndSaveNodeSchemaFile("onap");
+		});
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test
 	public void testCreateAndSaveSchemaFileYaml() throws Exception {
-		SchemaZipFileEnum schemaZipFileEnum = null;
-		Object content = null;
+		assertThrows(NullPointerException.class, () -> {
+			SchemaZipFileEnum schemaZipFileEnum = null;
+			Object content = null;
 
-		// default test
-		SdcSchemaFileImport.createAndSaveSchemaFileYaml(schemaZipFileEnum, content);
+			// default test
+			SdcSchemaFileImport.createAndSaveSchemaFileYaml(schemaZipFileEnum, content);
+		});
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testCreateAndSaveSchemaFileYaml_1() throws Exception {
-		String fileName = "";
-		String[] importFileList = new String[] { "" };
-		String collectionTitle = "";
-		Object content = null;
+		assertThrows(IllegalArgumentException.class, () -> {
+			String fileName = "";
+			String[] importFileList = new String[] { "" };
+			String collectionTitle = "";
+			Object content = null;
 
-		// default test
-		SdcSchemaFileImport.createAndSaveSchemaFileYaml(fileName, importFileList, collectionTitle, content);
+			// default test
+			SdcSchemaFileImport.createAndSaveSchemaFileYaml(fileName, importFileList, collectionTitle, content);
+		});
 	}
 }

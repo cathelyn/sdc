@@ -26,7 +26,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.openecomp.sdc.asdctool.impl.GraphMLDataAnalyzer.EXCEL_EXTENSION;
 import static org.openecomp.sdc.asdctool.impl.GraphMLDataAnalyzer.GRAPH_ML_EXTENSION;
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class GraphMLDataAnalyzerTest {
 

@@ -25,6 +25,7 @@ import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.openecomp.sdc.asdctool.migration.core.DBVersion;
@@ -58,9 +59,11 @@ public class SdcArchiveMigrationTest {
         assertThat(dbVersion, Is.is(sdcArchiveMigration.getVersion()));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testMigrate() {
-        assertThat(sdcArchiveMigration,IsNull.notNullValue());
-        sdcArchiveMigration.migrate();
+    @Test
+    public void testMigrate() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            assertThat(sdcArchiveMigration,IsNull.notNullValue());
+            sdcArchiveMigration.migrate();
+        });
     }
 }

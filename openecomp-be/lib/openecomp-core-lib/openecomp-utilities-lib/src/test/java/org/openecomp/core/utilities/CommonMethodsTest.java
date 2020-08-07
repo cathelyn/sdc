@@ -21,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -70,9 +71,11 @@ public class CommonMethodsTest {
         assertEquals(",", CommonMethods.arrayToCommaSeparatedString(new String[] {"", ""}));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testArrayToCommaSeparatedStringNull() {
-        CommonMethods.arrayToCommaSeparatedString(null);
+    @Test
+    public void testArrayToCommaSeparatedStringNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            CommonMethods.arrayToCommaSeparatedString(null);
+        });
     }
 
     @Test
@@ -95,9 +98,11 @@ public class CommonMethodsTest {
         assertEquals("/", CommonMethods.arrayToSeparatedString(new String[] {"", ""}, '/'));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testArrayToSeparatedStringNull() {
-        CommonMethods.arrayToSeparatedString(null, '/');
+    @Test
+    public void testArrayToSeparatedStringNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            CommonMethods.arrayToSeparatedString(null, '/');
+        });
     }
 
     @Test
@@ -120,9 +125,11 @@ public class CommonMethodsTest {
         assertEquals("", CommonMethods.collectionToCommaSeparatedString(Collections.emptySet()));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testCollectionToCommaSeparatedStringNull() {
-        assertNull(CommonMethods.collectionToCommaSeparatedString(null));
+    @Test
+    public void testCollectionToCommaSeparatedStringNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            assertNull(CommonMethods.collectionToCommaSeparatedString(null));
+        });
     }
 
     @Test
@@ -174,29 +181,40 @@ public class CommonMethodsTest {
         assertTrue(obj instanceof String);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testNewInstanceIncorrectClassProvided() {
-        assertNull(CommonMethods.newInstance("java.lang.Stringss"));
+    @Test
+    public void testNewInstanceIncorrectClassProvided() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertNull(CommonMethods.newInstance("java.lang.Stringss"));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testNewInstanceClassNotProvided() {
-        assertNull(CommonMethods.newInstance(null, Object.class));
+    @Test
+    public void testNewInstanceClassNotProvided() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertNull(CommonMethods.newInstance(null, Object.class));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testNewInstanceObjectNotProvided() {
-        assertNull(CommonMethods.newInstance(JAVA_LANG_STRING, null));
+    @Test
+    public void testNewInstanceObjectNotProvided() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertNull(CommonMethods.newInstance(JAVA_LANG_STRING, null));
+        });
     }
 
-    @Test(expected = ClassCastException.class)
-    public void testNewInstanceClassCastException() {
-        assertNull(CommonMethods.newInstance(JAVA_LANG_STRING, ArrayList.class));
+    @Test
+    public void testNewInstanceClassCastException() throws Exception {
+        assertThrows(ClassCastException.class, () -> {
+            assertNull(CommonMethods.newInstance(JAVA_LANG_STRING, ArrayList.class));
+        });
     }
 
-    @Test(expected = RuntimeException.class)
-    public void testNewInstanceInvalidClassProvided() {
-        assertNull(CommonMethods.newInstance(List.class));
+    @Test
+    public void testNewInstanceInvalidClassProvided() throws Exception {
+        assertThrows(RuntimeException.class, () -> {
+            assertNull(CommonMethods.newInstance(List.class));
+        });
+
     }
 
     @Test

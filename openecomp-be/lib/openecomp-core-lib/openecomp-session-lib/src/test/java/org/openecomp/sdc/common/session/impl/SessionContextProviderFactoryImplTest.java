@@ -22,16 +22,16 @@ package org.openecomp.sdc.common.session.impl;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.openecomp.sdc.common.session.SessionContextProvider;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;;
+import org.junit.jupiter.api.Test;
 
 public class SessionContextProviderFactoryImplTest {
 
     @InjectMocks
     private SessionContextProviderFactoryImpl sessionContextProviderFactoryImpl;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
@@ -40,6 +40,6 @@ public class SessionContextProviderFactoryImplTest {
     public void testCreateInterface() {
         SessionContextProvider sessionContextProvider = sessionContextProviderFactoryImpl.createInterface();
 
-        Assert.assertTrue(sessionContextProvider instanceof AsdcSessionContextProvider);
+        assertTrue(sessionContextProvider instanceof AsdcSessionContextProvider);
     }
 }

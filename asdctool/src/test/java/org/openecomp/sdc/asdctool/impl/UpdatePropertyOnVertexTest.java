@@ -22,6 +22,7 @@ package org.openecomp.sdc.asdctool.impl;
 
 import org.janusgraph.core.JanusGraph;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Map;
@@ -32,27 +33,31 @@ public class UpdatePropertyOnVertexTest {
 		return new UpdatePropertyOnVertex();
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testOpenGraph() throws Exception {
-		UpdatePropertyOnVertex testSubject;
-		String janusGraphFileLocation = "";
-		JanusGraph result;
+		assertThrows(IllegalArgumentException.class, () -> {
+			UpdatePropertyOnVertex testSubject;
+			String janusGraphFileLocation = "";
+			JanusGraph result;
 
-		// default test
-		testSubject = createTestSubject();
-		result = testSubject.openGraph("");
+			// default test
+			testSubject = createTestSubject();
+			result = testSubject.openGraph("");
+		});
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test
 	public void testUpdatePropertyOnServiceAtLeastCertified() throws Exception {
-		UpdatePropertyOnVertex testSubject;
-		String janusGraphFile = "";
-		Map<String, Object> keyValueToSet = null;
-		List<Map<String, Object>> orCriteria = null;
-		Integer result;
+		assertThrows(NullPointerException.class, () -> {
+			UpdatePropertyOnVertex testSubject;
+			String janusGraphFile = "";
+			Map<String, Object> keyValueToSet = null;
+			List<Map<String, Object>> orCriteria = null;
+			Integer result;
 
-		// default test
-		testSubject = createTestSubject();
-		result = testSubject.updatePropertyOnServiceAtLeastCertified(janusGraphFile, keyValueToSet, orCriteria);
+			// default test
+			testSubject = createTestSubject();
+			result = testSubject.updatePropertyOnServiceAtLeastCertified(janusGraphFile, keyValueToSet, orCriteria);
+		});
 	}
 }

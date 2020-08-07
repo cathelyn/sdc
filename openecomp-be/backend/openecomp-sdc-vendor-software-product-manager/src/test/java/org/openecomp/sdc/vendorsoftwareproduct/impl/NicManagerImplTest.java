@@ -18,6 +18,7 @@ package org.openecomp.sdc.vendorsoftwareproduct.impl;
 
 import org.junit.After;
 import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -420,9 +421,11 @@ public class NicManagerImplTest {
         VendorSoftwareProductErrorCodes.DELETE_NIC_NOT_ALLOWED);
   }
 
-  @Test(expected = CoreException.class)
+  @Test
   public void testGetNonExistingNicQuestionnaire() throws Exception {
-    nicManager.getNicQuestionnaire(VSP_ID, VERSION, COMPONENT_ID, NIC1_ID);
+    assertThrows(CoreException.class, () -> {
+      nicManager.getNicQuestionnaire(VSP_ID, VERSION, COMPONENT_ID, NIC1_ID);
+    });
   }
 
   @Test
@@ -442,11 +445,13 @@ public class NicManagerImplTest {
     Assert.assertNull(questionnaire.getErrorMessage());
   }
 
-  @Test(expected = CoreException.class)
+  @Test
   public void testUpdateNonExistingNicQuestionnaire() throws Exception {
-    doReturn(null).when(nicDao).get(any());
-    nicManager
-        .updateNicQuestionnaire(VSP_ID, VERSION, COMPONENT_ID, NIC1_ID, "questionnaire data");
+    assertThrows(CoreException.class, () -> {
+      doReturn(null).when(nicDao).get(any());
+      nicManager
+              .updateNicQuestionnaire(VSP_ID, VERSION, COMPONENT_ID, NIC1_ID, "questionnaire data");
+    });
   }
 
   @Test

@@ -26,6 +26,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -100,9 +101,11 @@ public class CompositionEntityDataManagerImplTest {
     MockitoAnnotations.initMocks(this);
   }
 
-  @Test(expected = CoreException.class)
-  public void testAddNullEntity_negative() {
-    compositionEntityDataManager.addEntity(null, null);
+  @Test
+  public void testAddNullEntity_negative() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      compositionEntityDataManager.addEntity(null, null);
+    });
   }
 
   @Test
@@ -283,13 +286,15 @@ public class CompositionEntityDataManagerImplTest {
     return new String(FileUtils.toByteArray(FileUtils.loadFileToInputStream(path)));
   }
 
-  @Test(expected = CoreException.class)
-  public void shouldReturnCoreException() {
-    //given
-    NetworkCompositionSchemaInput schemaTemplateInput = new NetworkCompositionSchemaInput();
+  @Test
+  public void shouldReturnCoreException() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      //given
+      NetworkCompositionSchemaInput schemaTemplateInput = new NetworkCompositionSchemaInput();
 
-    //then
-    compositionEntityDataManager.validateEntity(null, SchemaTemplateContext.composition, schemaTemplateInput);
+      //then
+      compositionEntityDataManager.validateEntity(null, SchemaTemplateContext.composition, schemaTemplateInput);
+    });
   }
 
 }

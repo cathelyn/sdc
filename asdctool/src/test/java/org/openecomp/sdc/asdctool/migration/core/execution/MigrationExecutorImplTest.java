@@ -23,10 +23,10 @@ package org.openecomp.sdc.asdctool.migration.core.execution;
 import org.openecomp.sdc.asdctool.migration.DummyMigrationFactory;
 import org.openecomp.sdc.asdctool.migration.core.task.Migration;
 import org.openecomp.sdc.asdctool.migration.core.task.MigrationResult;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MigrationExecutorImplTest {
 

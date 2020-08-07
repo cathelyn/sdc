@@ -21,6 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -150,9 +151,11 @@ public class ZusammenAdaptorImplTest {
         assertEquals(returnedElements, elements);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void failWhenSavingElementWithoutIdNameOrAction() {
-        zusammenAdaptor.saveElement(CONTEXT, ELEMENT_CONTEXT, new ZusammenElement(), "Illegal element save");
+    @Test
+    public void failWhenSavingElementWithoutIdNameOrAction() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            zusammenAdaptor.saveElement(CONTEXT, ELEMENT_CONTEXT, new ZusammenElement(), "Illegal element save");
+        });
     }
 
     @Test

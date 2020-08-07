@@ -21,6 +21,7 @@
 package org.openecomp.sdc.asdctool.migration.dao;
 
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.openecomp.sdc.be.dao.cassandra.CassandraClient;
 import org.openecomp.sdc.be.resources.data.MigrationTaskEntry;
 
@@ -43,34 +44,40 @@ public class MigrationTasksDaoTest {
 		testSubject.init();
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test
 	public void testGetLatestMinorVersion() throws Exception {
-		MigrationTasksDao testSubject;
-		BigInteger majorVersion = null;
-		BigInteger result;
+		assertThrows(NullPointerException.class, () -> {
+			MigrationTasksDao testSubject;
+			BigInteger majorVersion = null;
+			BigInteger result;
 
-		// default test
-		testSubject = createTestSubject();
-		result = testSubject.getLatestMinorVersion(majorVersion);
+			// default test
+			testSubject = createTestSubject();
+			result = testSubject.getLatestMinorVersion(majorVersion);
+		});
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test
 	public void testDeleteAllTasksForVersion() throws Exception {
-		MigrationTasksDao testSubject;
-		BigInteger majorVersion = null;
+		assertThrows(NullPointerException.class, () -> {
+			MigrationTasksDao testSubject;
+			BigInteger majorVersion = null;
 
-		// default test
-		testSubject = createTestSubject();
-		testSubject.deleteAllTasksForVersion(majorVersion);
+			// default test
+			testSubject = createTestSubject();
+			testSubject.deleteAllTasksForVersion(majorVersion);
+		});
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test
 	public void testCreateMigrationTask() throws Exception {
-		MigrationTasksDao testSubject;
-		MigrationTaskEntry migrationTask = null;
+		assertThrows(NullPointerException.class, () -> {
+			MigrationTasksDao testSubject;
+			MigrationTaskEntry migrationTask = null;
 
-		// default test
-		testSubject = createTestSubject();
-		testSubject.createMigrationTask(migrationTask);
+			// default test
+			testSubject = createTestSubject();
+			testSubject.createMigrationTask(migrationTask);
+		});
 	}
 }

@@ -20,6 +20,7 @@
 package org.openecomp.sdcrests.item.rest.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.openecomp.sdcrests.item.types.VersionAction.Clean;
 import static org.openecomp.sdcrests.item.types.VersionAction.Commit;
 import static org.openecomp.sdcrests.item.types.VersionAction.Reset;
@@ -149,22 +150,26 @@ public class VersionsImplTest {
         Mockito.verify(versioningManager).revert(Mockito.any(), Mockito.any(), Mockito.any());
     }
 
-    @Test(expected = CoreException.class)
-    public void shouldActOnRevertAndEmptyRevisionId() {
-        VersionsImpl versions = new VersionsImpl();
-        versions.setManagersProvider(managersProvider);
-        Mockito.when(request.getAction()).thenReturn(Revert);
-        Mockito.when(request.getRevisionRequest()).thenReturn(revisionRequest);
-        Mockito.when(revisionRequest.getRevisionId()).thenReturn(null);
-        versions.actOn(request, ITEM_ID, VERSION_ID, USER);
+    @Test
+    public void shouldActOnRevertAndEmptyRevisionId() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            VersionsImpl versions = new VersionsImpl();
+            versions.setManagersProvider(managersProvider);
+            Mockito.when(request.getAction()).thenReturn(Revert);
+            Mockito.when(request.getRevisionRequest()).thenReturn(revisionRequest);
+            Mockito.when(revisionRequest.getRevisionId()).thenReturn(null);
+            versions.actOn(request, ITEM_ID, VERSION_ID, USER);
+        });
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void shouldActOnOther() {
-        VersionsImpl versions = new VersionsImpl();
-        versions.setManagersProvider(managersProvider);
-        Mockito.when(request.getAction()).thenReturn(Reset);
-        versions.actOn(request, ITEM_ID, VERSION_ID, USER);
+    @Test
+    public void shouldActOnOther() throws Exception {
+        assertThrows(UnsupportedOperationException.class, () -> {
+            VersionsImpl versions = new VersionsImpl();
+            versions.setManagersProvider(managersProvider);
+            Mockito.when(request.getAction()).thenReturn(Reset);
+            versions.actOn(request, ITEM_ID, VERSION_ID, USER);
+        });
     }
 
     @Test

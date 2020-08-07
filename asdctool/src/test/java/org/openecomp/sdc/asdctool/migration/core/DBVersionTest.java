@@ -20,16 +20,18 @@
 
 package org.openecomp.sdc.asdctool.migration.core;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class DBVersionTest {
 
-
-    @DataProvider(name = "invalidVersionStringsProvider")
-    private Object[][] invalidVersionStringsProvider() {
+    
+    private static Object[][] invalidVersionStringsProvider() {
         return new Object[][] {
                 {"1.1.1"},
                 {"1.a"},
@@ -38,13 +40,15 @@ public class DBVersionTest {
         };
     }
 
-    @Test(dataProvider = "invalidVersionStringsProvider", expectedExceptions = MigrationException.class)
-    public void testFromString_invalidVersionString(String invalidVersion) {
-        DBVersion.fromString(invalidVersion);
+    @ParameterizedTest
+    @MethodSource("invalidVersionStringsProvider")
+    public void testFromString_invalidVersionString(String invalidVersion) throws Exception {
+        assertThrows(MigrationException.class, () -> {
+            DBVersion.fromString(invalidVersion);
+        });
     }
-
-    @DataProvider(name = "validVersionStringsProvider")
-    private Object[][] validVersionStringsProvider() {
+    
+    private static Object[][] validVersionStringsProvider() {
         return new Object[][] {
                 {"1.1", "1.1"},
                 {"10100.0001", "10100.1"},
@@ -53,7 +57,8 @@ public class DBVersionTest {
         };
     }
 
-    @Test(dataProvider = "validVersionStringsProvider")
+    @ParameterizedTest
+    @MethodSource("validVersionStringsProvider")
     public void testFromString(String validString, String expectedVersionString) {
         assertEquals(expectedVersionString, DBVersion.fromString(validString).toString());
     }
@@ -70,7 +75,9 @@ public class DBVersionTest {
         };
     }
 
-    @Test(dataProvider = "versionComparisionProvider")
+
+    @ParameterizedTest
+    @MethodSource("versionComparisionProvider")
     public void testVersionCompareTo2(String firstVersion, String otherVersion, int expectedComparisionResult) {
         assertEquals(DBVersion.fromString(firstVersion).compareTo(DBVersion.fromString(otherVersion)), expectedComparisionResult);
     }

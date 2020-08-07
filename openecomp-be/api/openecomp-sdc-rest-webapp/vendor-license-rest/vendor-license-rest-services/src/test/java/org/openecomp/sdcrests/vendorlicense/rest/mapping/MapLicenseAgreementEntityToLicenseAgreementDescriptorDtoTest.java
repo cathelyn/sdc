@@ -16,13 +16,13 @@
 
 package org.openecomp.sdcrests.vendorlicense.rest.mapping;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.openecomp.sdc.vendorlicense.dao.types.ChoiceOrOther;
 import org.openecomp.sdc.vendorlicense.dao.types.LicenseAgreementEntity;
 import org.openecomp.sdc.vendorlicense.dao.types.LicenseTerm;
 import org.openecomp.sdcrests.vendorlicense.types.LicenseAgreementDescriptorDto;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class MapLicenseAgreementEntityToLicenseAgreementDescriptorDtoTest {

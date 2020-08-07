@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyObject;
@@ -177,25 +178,27 @@ public class VendorSoftwareProductManagerImplTest {
         }
     }
 
-  @Test(expected = IOException.class)
+  @Test
   public void testCreatePackageEtsiNoManifest() throws IOException {
-    try(InputStream metadataInput = getClass().getResourceAsStream("/vspmanager.csar/metadata/ValidETSItosca.meta"))
-    {
-      FileContentHandler handler = new FileContentHandler();
-      handler.addFile(TOSCA_META_PATH_FILE_NAME, IOUtils.toByteArray(metadataInput));
-      ToscaServiceModel toscaMetadata = new ToscaServiceModel(handler, new HashMap<>(), "");
-      when(enrichedServiceModelDaoMock.getServiceModel(any(), any())).thenReturn(toscaMetadata );
-      VspDetails vsp =
-              createVspDetails("0", new Version(), "Vsp_PNF", "Test-vsp-pnf", "vendorName", "esy", "icon",
-                      "category", "subCategory", "123", null);
-      //want to avoid triggering populateVersionsForVlm method
-      vsp.setVlmVersion(null);
+    assertThrows(IOException.class, () -> {
+      try(InputStream metadataInput = getClass().getResourceAsStream("/vspmanager.csar/metadata/ValidETSItosca.meta"))
+      {
+        FileContentHandler handler = new FileContentHandler();
+        handler.addFile(TOSCA_META_PATH_FILE_NAME, IOUtils.toByteArray(metadataInput));
+        ToscaServiceModel toscaMetadata = new ToscaServiceModel(handler, new HashMap<>(), "");
+        when(enrichedServiceModelDaoMock.getServiceModel(any(), any())).thenReturn(toscaMetadata );
+        VspDetails vsp =
+                createVspDetails("0", new Version(), "Vsp_PNF", "Test-vsp-pnf", "vendorName", "esy", "icon",
+                        "category", "subCategory", "123", null);
+        //want to avoid triggering populateVersionsForVlm method
+        vsp.setVlmVersion(null);
 
-      when(vspInfoDaoMock.get(any())).thenReturn(vsp);
-      when(licenseArtifactsServiceMock.createLicenseArtifacts(any(),any(), any(), any())).thenReturn(new FileContentHandler());
-      vendorSoftwareProductManager.createPackage("0", new Version());
-      fail();
-    }
+        when(vspInfoDaoMock.get(any())).thenReturn(vsp);
+        when(licenseArtifactsServiceMock.createLicenseArtifacts(any(),any(), any(), any())).thenReturn(new FileContentHandler());
+        vendorSoftwareProductManager.createPackage("0", new Version());
+        fail();
+      }
+    });
   }
 
     @Test
@@ -293,28 +296,30 @@ public class VendorSoftwareProductManagerImplTest {
     assertVspsEquals(vsp, vspToCreate);
   }
 
-  @Test(expected = CoreException.class)
-  public void testUpdateWithExistingName_negative() {
-    VersionInfo versionInfo = new VersionInfo();
-    versionInfo.setActiveVersion(VERSION01);
-    doReturn(versionInfo).when(versioningManagerMock).getEntityVersionInfo(
-        VendorSoftwareProductConstants.VENDOR_SOFTWARE_PRODUCT_VERSIONABLE_TYPE, VSP_ID, USER1,
-        VersionableEntityAction.Write);
+  @Test
+  public void testUpdateWithExistingName_negative() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      VersionInfo versionInfo = new VersionInfo();
+      versionInfo.setActiveVersion(VERSION01);
+      doReturn(versionInfo).when(versioningManagerMock).getEntityVersionInfo(
+              VendorSoftwareProductConstants.VENDOR_SOFTWARE_PRODUCT_VERSIONABLE_TYPE, VSP_ID, USER1,
+              VersionableEntityAction.Write);
 
-    VspDetails existingVsp =
-        createVspDetails(VSP_ID, VERSION01, "Vsp1", "Test-existingVsp", "vendorName", "vlm1Id",
-            "icon", "category", "subCategory", "123", null);
-    VspDetails updatedVsp =
-        createVspDetails(VSP_ID, VERSION01, "Vsp1_updated", "Test-existingVsp", "vendorName",
-            "vlm1Id", "icon", "category", "subCategory", "123", null);
-    doReturn(existingVsp).when(vspInfoDaoMock)
-        .get(any(VspDetails.class));
-    doThrow(new CoreException(
-        new ErrorCode.ErrorCodeBuilder().withCategory(ErrorCategory.APPLICATION).build()))
-        .when(vendorSoftwareProductManager)
-        .updateUniqueName(existingVsp.getName(), updatedVsp.getName());
+      VspDetails existingVsp =
+              createVspDetails(VSP_ID, VERSION01, "Vsp1", "Test-existingVsp", "vendorName", "vlm1Id",
+                      "icon", "category", "subCategory", "123", null);
+      VspDetails updatedVsp =
+              createVspDetails(VSP_ID, VERSION01, "Vsp1_updated", "Test-existingVsp", "vendorName",
+                      "vlm1Id", "icon", "category", "subCategory", "123", null);
+      doReturn(existingVsp).when(vspInfoDaoMock)
+              .get(any(VspDetails.class));
+      doThrow(new CoreException(
+              new ErrorCode.ErrorCodeBuilder().withCategory(ErrorCategory.APPLICATION).build()))
+              .when(vendorSoftwareProductManager)
+              .updateUniqueName(existingVsp.getName(), updatedVsp.getName());
 
-    vendorSoftwareProductManager.updateVsp(updatedVsp);
+      vendorSoftwareProductManager.updateVsp(updatedVsp);
+    });
   }
 
   @Test
@@ -386,11 +391,13 @@ public class VendorSoftwareProductManagerImplTest {
 
   }
 
-  @Test(expected = CoreException.class)
-  public void testGetNonExistingVersion_negative() {
-    Version notExistversion = new Version("43, 8");
-    doReturn(null).when(vspInfoDaoMock).get(any(VspDetails.class));
-    vendorSoftwareProductManager.getVsp(VSP_ID, notExistversion);
+  @Test
+  public void testGetNonExistingVersion_negative() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      Version notExistversion = new Version("43, 8");
+      doReturn(null).when(vspInfoDaoMock).get(any(VspDetails.class));
+      vendorSoftwareProductManager.getVsp(VSP_ID, notExistversion);
+    });
   }
 
   @Test

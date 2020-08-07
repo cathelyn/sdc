@@ -22,7 +22,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.onap.sdc.tosca.services.CommonUtil.DEFAULT;
 import static org.onap.sdc.tosca.services.CommonUtil.UNDERSCORE_DEFAULT;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.google.common.io.Files;
 import java.io.File;
@@ -33,7 +34,7 @@ import org.openecomp.core.utilities.file.FileContentHandler;
 import org.openecomp.core.utilities.orchestration.OnboardingTypesEnum;
 import org.openecomp.sdc.common.errors.CoreException;
 import org.openecomp.sdc.common.zip.exception.ZipException;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 public class CommonUtilTest {
     private static final String VALID_ZIP_FILE_PATH = "src/test/resources/valid.zip";
@@ -70,13 +71,18 @@ public class CommonUtilTest {
         assertThat(fch.containsFile("file.two.yaml"), is(true));
     }
 
-    @Test(expectedExceptions={CoreException.class})
+    @Test
     public void testValidateNoFolders() throws IOException {
-        byte[] file = getFileAsBytes(VALID_ZIP_WITH_DIR_FILE_PATH);
+        assertThrows(CoreException.class, () -> {
 
-        FileContentHandler fch = CommonUtil.validateAndUploadFileContent(OnboardingTypesEnum.ZIP, file);
+            byte[] file = getFileAsBytes(VALID_ZIP_WITH_DIR_FILE_PATH);
 
-        fail("Should throw CoreException");
+            FileContentHandler fch = CommonUtil.validateAndUploadFileContent(OnboardingTypesEnum.ZIP, file);
+
+            fail("Should throw CoreException");
+        });
+
+
     }
 
     @Test

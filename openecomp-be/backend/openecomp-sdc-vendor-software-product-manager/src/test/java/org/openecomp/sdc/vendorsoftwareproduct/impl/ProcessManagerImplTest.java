@@ -22,6 +22,7 @@ package org.openecomp.sdc.vendorsoftwareproduct.impl;
 
 import org.junit.After;
 import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -146,16 +147,18 @@ public class ProcessManagerImplTest {
     Assert.assertEquals(process, processToCreate);
   }
 
-  @Test(expected = CoreException.class)
-  public void testCreateWithExistingName_negative() {
-    ProcessEntity process = createProcess(VSP_ID, VERSION, COMPONENT_ID, null);
-    process.setName("p1 name");
+  @Test
+  public void testCreateWithExistingName_negative() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      ProcessEntity process = createProcess(VSP_ID, VERSION, COMPONENT_ID, null);
+      process.setName("p1 name");
 
-    doThrow(new CoreException(
-        new ErrorCode.ErrorCodeBuilder().withCategory(ErrorCategory.APPLICATION).build()))
-        .when(processManager).validateUniqueName(VSP_ID, VERSION, COMPONENT_ID, process.getName());
+      doThrow(new CoreException(
+              new ErrorCode.ErrorCodeBuilder().withCategory(ErrorCategory.APPLICATION).build()))
+              .when(processManager).validateUniqueName(VSP_ID, VERSION, COMPONENT_ID, process.getName());
 
-    processManager.createProcess(process);
+      processManager.createProcess(process);
+    });
   }
 
   @Test
@@ -166,19 +169,21 @@ public class ProcessManagerImplTest {
         VersioningErrorCodes.VERSIONABLE_SUB_ENTITY_NOT_FOUND);
   }
 
-  @Test(expected = CoreException.class)
-  public void testUpdateWithExistingName_negative() {
-    ProcessEntity existingProcess = createProcess(VSP_ID, VERSION, COMPONENT_ID, PROCESS1_ID);
-    doReturn(existingProcess).when(processDaoMock).get(any(ProcessEntity.class));
+  @Test
+  public void testUpdateWithExistingName_negative() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      ProcessEntity existingProcess = createProcess(VSP_ID, VERSION, COMPONENT_ID, PROCESS1_ID);
+      doReturn(existingProcess).when(processDaoMock).get(any(ProcessEntity.class));
 
-    ProcessEntity processToUpdate = createProcess(VSP_ID, VERSION, COMPONENT_ID, PROCESS1_ID);
-    doThrow(new CoreException(
-        new ErrorCode.ErrorCodeBuilder().withCategory(ErrorCategory.APPLICATION).build()))
-        .when(processManager)
-        .updateUniqueName(VSP_ID, VERSION, COMPONENT_ID, existingProcess.getName(),
-            processToUpdate.getName());
+      ProcessEntity processToUpdate = createProcess(VSP_ID, VERSION, COMPONENT_ID, PROCESS1_ID);
+      doThrow(new CoreException(
+              new ErrorCode.ErrorCodeBuilder().withCategory(ErrorCategory.APPLICATION).build()))
+              .when(processManager)
+              .updateUniqueName(VSP_ID, VERSION, COMPONENT_ID, existingProcess.getName(),
+                      processToUpdate.getName());
 
-    processManager.updateProcess(processToUpdate);
+      processManager.updateProcess(processToUpdate);
+    });
   }
 
   @Test
@@ -223,9 +228,11 @@ public class ProcessManagerImplTest {
     Assert.assertEquals(actual.getArtifactName(), ARTIFACT_NAME);
   }
 
-  @Test(expected = CoreException.class)
-  public void testDeleteNonExistingProcessId_negative() {
-    processManager.deleteProcess(VSP_ID, VERSION, COMPONENT_ID, PROCESS1_ID);
+  @Test
+  public void testDeleteNonExistingProcessId_negative() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      processManager.deleteProcess(VSP_ID, VERSION, COMPONENT_ID, PROCESS1_ID);
+    });
   }
 
   @Test
@@ -376,9 +383,11 @@ public class ProcessManagerImplTest {
     }
   }
 
-  @Test(expected = CoreException.class)
-  public void shouldReturnCoreException() {
-    processManager.getProcessArtifact(VSP_ID, VERSION, COMPONENT_ID, PROCESS1_ID);
+  @Test
+  public void shouldReturnCoreException() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      processManager.getProcessArtifact(VSP_ID, VERSION, COMPONENT_ID, PROCESS1_ID);
+    });
   }
 
 }

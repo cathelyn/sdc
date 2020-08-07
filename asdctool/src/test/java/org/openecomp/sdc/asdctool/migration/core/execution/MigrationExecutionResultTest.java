@@ -21,6 +21,7 @@
 package org.openecomp.sdc.asdctool.migration.core.execution;
 
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.openecomp.sdc.asdctool.migration.core.DBVersion;
 import org.openecomp.sdc.asdctool.migration.core.task.MigrationResult.MigrationStatus;
 import org.openecomp.sdc.be.resources.data.MigrationTaskEntry;
@@ -31,14 +32,16 @@ public class MigrationExecutionResultTest {
 		return new MigrationExecutionResult();
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test
 	public void testToMigrationTaskEntry() throws Exception {
-		MigrationExecutionResult testSubject;
-		MigrationTaskEntry result;
+		assertThrows(NullPointerException.class, () -> {
+			MigrationExecutionResult testSubject;
+			MigrationTaskEntry result;
 
-		// default test
-		testSubject = createTestSubject();
-		result = testSubject.toMigrationTaskEntry();
+			// default test
+			testSubject = createTestSubject();
+			result = testSubject.toMigrationTaskEntry();
+		});
 	}
 
 	@Test

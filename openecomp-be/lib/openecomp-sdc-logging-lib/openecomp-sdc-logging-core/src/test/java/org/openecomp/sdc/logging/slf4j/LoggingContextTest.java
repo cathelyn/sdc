@@ -19,6 +19,7 @@ package org.openecomp.sdc.logging.slf4j;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.UUID;
 import org.junit.After;
@@ -45,9 +46,11 @@ public class LoggingContextTest {
         assertEquals(MDCRunnableWrapper.class, LoggingContext.copyToRunnable(() -> { }).getClass());
     }
 
-    @Test(expected = NullPointerException.class)
-    public void throwNpeWhenToRunnableWithNull() {
-        LoggingContext.copyToRunnable(null);
+    @Test
+    public void throwNpeWhenToRunnableWithNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            LoggingContext.copyToRunnable(null);
+        });
     }
 
     @Test
@@ -55,9 +58,11 @@ public class LoggingContextTest {
         assertEquals(MDCCallableWrapper.class, LoggingContext.copyToCallable(() -> "").getClass());
     }
 
-    @Test(expected = NullPointerException.class)
-    public void throwNpeWhenToCallableWithNull() {
-        LoggingContext.copyToCallable(null);
+    @Test
+    public void throwNpeWhenToCallableWithNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            LoggingContext.copyToCallable(null);
+        });
     }
 
     @Test

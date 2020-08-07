@@ -21,16 +21,18 @@
 package org.openecomp.sdc.asdctool.impl;
 
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class JanusGraphInitializerTest {
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testCreateGraph() throws Exception {
-		String janusGraphCfgFile = "";
-		boolean result;
+		assertThrows(IllegalArgumentException.class, () -> {
+			String janusGraphCfgFile = "";
+			boolean result;
 
-		// default test
-		result = JanusGraphInitializer.createGraph("");
-		
+			// default test
+			result = JanusGraphInitializer.createGraph("");
+		});
 	}
 }

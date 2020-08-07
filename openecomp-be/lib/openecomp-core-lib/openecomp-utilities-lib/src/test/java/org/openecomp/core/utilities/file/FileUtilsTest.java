@@ -23,6 +23,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,14 +69,18 @@ public class FileUtilsTest {
         assertTrue(FileUtils.readViaInputStream(TEST_RESOURCE, TEST_FUNCTION) > 0);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testReadViaInputStreamNull() {
-        FileUtils.readViaInputStream((String) null, TEST_FUNCTION);
+    @Test
+    public void testReadViaInputStreamNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            FileUtils.readViaInputStream((String) null, TEST_FUNCTION);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testReadViaInputStreamNotFound() {
-        FileUtils.readViaInputStream("notfound.txt", TEST_FUNCTION);
+    @Test
+    public void testReadViaInputStreamNotFound() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            FileUtils.readViaInputStream("notfound.txt", TEST_FUNCTION);
+        });
     }
 
     @Test
@@ -177,9 +182,11 @@ public class FileUtilsTest {
         Assert.assertNotNull(inputStream);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void testLoadFileToInputStreamIncorrectFilePath() {
-        FileUtils.loadFileToInputStream("invalidfilepath");
+    @Test
+    public void testLoadFileToInputStreamIncorrectFilePath() throws Exception {
+        assertThrows(RuntimeException.class, () -> {
+            FileUtils.loadFileToInputStream("invalidfilepath");
+        });
     }
 
     @Test

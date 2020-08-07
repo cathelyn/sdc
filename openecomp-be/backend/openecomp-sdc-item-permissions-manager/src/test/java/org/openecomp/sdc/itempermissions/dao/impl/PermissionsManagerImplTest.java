@@ -25,8 +25,11 @@ import org.openecomp.sdc.notification.services.NotificationPropagationManager;
 import org.openecomp.sdc.notification.services.SubscriptionService;
 import org.openecomp.sdc.versioning.AsdcItemManager;
 import org.openecomp.sdc.versioning.types.Item;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -38,8 +41,8 @@ import java.util.stream.Stream;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.openecomp.sdc.itempermissions.notifications.NotificationConstants.*;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by ayalaben on 7/6/2017
@@ -70,21 +73,25 @@ public class PermissionsManagerImplTest {
   private PermissionsManagerImpl permissionsManager;
 
 
-  @BeforeMethod
+  @BeforeEach
   public void setUp() throws Exception {
     SessionContextProviderFactory.getInstance().createInterface().create(USER,
         tenant);
     MockitoAnnotations.initMocks(this);
   }
 
-  @Test(expectedExceptions = CoreException.class, expectedExceptionsMessageRegExp = "Permissions " +
-          "Error. The user does not have permission to perform this action.")
-  public void testUpdateItemPermissionsWhenNotAllowed() {
-    doReturn(false).when(permissionsServicesMock).isAllowed(ITEM1_ID, USER, ACTION);
+  @Test
+  public void testUpdateItemPermissionsWhenNotAllowed() throws Exception {
+    CoreException thrown = assertThrows(CoreException.class, () -> {
+      doReturn(false).when(permissionsServicesMock).isAllowed(ITEM1_ID, USER, ACTION);
 
-    permissionsManager
-            .updateItemPermissions(ITEM1_ID, PERMISSION, Collections.singleton(AFFECTED_USER1),
-                    new HashSet<>());
+      permissionsManager
+              .updateItemPermissions(ITEM1_ID, PERMISSION, Collections.singleton(AFFECTED_USER1),
+                      new HashSet<>());
+    });
+
+    assertTrue(thrown.getMessage().contains("Permissions " +
+            "Error. The user does not have permission to perform this action."));
   }
 
   @Test

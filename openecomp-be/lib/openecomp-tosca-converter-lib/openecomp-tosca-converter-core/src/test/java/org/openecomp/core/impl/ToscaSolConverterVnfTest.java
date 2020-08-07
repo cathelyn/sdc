@@ -28,6 +28,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.onap.sdc.tosca.datatypes.model.ServiceTemplate;
 import org.openecomp.core.utilities.file.FileContentHandler;
 import org.openecomp.sdc.common.errors.CoreException;
@@ -84,43 +85,48 @@ public class ToscaSolConverterVnfTest {
             mainServiceTemplate, entryDefinitionTemplateName);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void testGivenSOL004InvalidDirectoryPackage_whenToscaSolConverterIsCalled_exceptionIsExpected() {
-        fileContentHandler.addFile("TOSCA-Metadata/TOSCA.meta",
-            ("TOSCA-Meta-File-Version: 1.0\n " +
-                "CSAR-Version: 1.1\n" +
-                "Created-by: Ericsson\n" +
-                "Entry-Definitions: Definitions/Main.yaml\n" +
-                "Entry-Manifest: Main.mf\n" +
-                "Entry-Change-Log: Artifacts/ChangeLog.txt")
-                .getBytes(StandardCharsets.UTF_8));
+    @Test
+    public void testGivenSOL004InvalidDirectoryPackage_whenToscaSolConverterIsCalled_exceptionIsExpected() throws Exception {
+        assertThrows(RuntimeException.class, () -> {
+            fileContentHandler.addFile("TOSCA-Metadata/TOSCA.meta",
+                    ("TOSCA-Meta-File-Version: 1.0\n " +
+                            "CSAR-Version: 1.1\n" +
+                            "Created-by: Ericsson\n" +
+                            "Entry-Definitions: Definitions/Main.yaml\n" +
+                            "Entry-Manifest: Main.mf\n" +
+                            "Entry-Change-Log: Artifacts/ChangeLog.txt")
+                            .getBytes(StandardCharsets.UTF_8));
 
-        fileContentHandler.addFile("Definitions/Main.yaml", getFileResource("/toscaSOlConverter/Main.yaml"));
-        fileContentHandler.addFile("Main.mf", "".getBytes());
-        fileContentHandler.addFile("Definitions/sample_import1.yaml", getFileResource("/toscaSOlConverter/sample_import3.yaml"));
+            fileContentHandler.addFile("Definitions/Main.yaml", getFileResource("/toscaSOlConverter/Main.yaml"));
+            fileContentHandler.addFile("Main.mf", "".getBytes());
+            fileContentHandler.addFile("Definitions/sample_import1.yaml", getFileResource("/toscaSOlConverter/sample_import3.yaml"));
 
-        convertToscaSol();
+            convertToscaSol();
+        });
     }
 
-    @Test(expected = IOException.class)
+    @Test
     public void testGivenMetaFileDoesNotExist_thenAnExceptionIsThrown() throws IOException {
-        toscaSolConverter.convert(fileContentHandler);
+        assertThrows(IOException.class, () -> {
+            toscaSolConverter.convert(fileContentHandler);
+        });
     }
 
-    @Test(expected = CoreException.class)
-    public void testGivenInvalidServiceTemplate_thenAnExceptionIsThrown() {
+    @Test
+    public void testGivenInvalidServiceTemplate_thenAnExceptionIsThrown() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            fileContentHandler.addFile("TOSCA-Metadata/TOSCA.meta",
+                    ("TOSCA-Meta-File-Version: 1.0\n " +
+                            "CSAR-Version: 1.1\n" +
+                            "Created-By: Ericsson\n" +
+                            "Entry-Definitions: Definitions/Main.yaml\n" +
+                            "Entry-Manifest: Main.mf\n" +
+                            "Entry-Change-Log: Artifacts/ChangeLog.txt")
+                            .getBytes(StandardCharsets.UTF_8));
 
-        fileContentHandler.addFile("TOSCA-Metadata/TOSCA.meta",
-                ("TOSCA-Meta-File-Version: 1.0\n " +
-                        "CSAR-Version: 1.1\n" +
-                        "Created-By: Ericsson\n" +
-                        "Entry-Definitions: Definitions/Main.yaml\n" +
-                        "Entry-Manifest: Main.mf\n" +
-                        "Entry-Change-Log: Artifacts/ChangeLog.txt")
-                        .getBytes(StandardCharsets.UTF_8));
-
-        fileContentHandler.addFile("Definitions/Main.yaml", getFileResource("/toscaSOlConverter/invalidMainService.yaml"));
-        convertToscaSol();
+            fileContentHandler.addFile("Definitions/Main.yaml", getFileResource("/toscaSOlConverter/invalidMainService.yaml"));
+            convertToscaSol();
+        });
     }
 
     private ToscaServiceModel convertToscaSol() {

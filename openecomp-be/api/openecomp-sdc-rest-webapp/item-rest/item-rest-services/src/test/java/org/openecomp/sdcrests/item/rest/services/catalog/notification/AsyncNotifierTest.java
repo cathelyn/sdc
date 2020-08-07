@@ -18,6 +18,7 @@ package org.openecomp.sdcrests.item.rest.services.catalog.notification;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.openecomp.sdcrests.item.rest.services.catalog.notification.AsyncNotifier.NextAction.DONE;
@@ -53,14 +54,18 @@ public class AsyncNotifierTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    @Test(expected = NullPointerException.class)
-    public void errorWhenWorkerNull() {
-        new AsyncNotifier.RetryingTask(null, 10, 10, Mockito.mock(ScheduledExecutorService.class));
+    @Test
+    public void errorWhenWorkerNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            new AsyncNotifier.RetryingTask(null, 10, 10, Mockito.mock(ScheduledExecutorService.class));
+        });
     }
 
-    @Test(expected = NullPointerException.class)
-    public void errorWhenSchedulerServiceNull() {
-        new AsyncNotifier.RetryingTask(() -> DONE, 10, 10, null);
+    @Test
+    public void errorWhenSchedulerServiceNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            new AsyncNotifier.RetryingTask(() -> DONE, 10, 10, null);
+        });
     }
 
     @Test

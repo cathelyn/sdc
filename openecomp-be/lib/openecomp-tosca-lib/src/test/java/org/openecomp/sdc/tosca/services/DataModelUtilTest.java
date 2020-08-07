@@ -26,6 +26,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -242,14 +243,16 @@ public class DataModelUtilTest {
         assertNull(nodeType.getCapabilities());
     }
 
-    @Test(expected = CoreException.class)
-    public void testAddNodeTypeCapabilitiesDefThrowsException() {
-        Map<String, CapabilityDefinition> capabilityDefinitionMap =
-                Stream.of(new AbstractMap.SimpleEntry<>(CAPABILITY_ID, new
-                        CapabilityDefinition())).collect(
-                        Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
+    @Test
+    public void testAddNodeTypeCapabilitiesDefThrowsException() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            Map<String, CapabilityDefinition> capabilityDefinitionMap =
+                    Stream.of(new AbstractMap.SimpleEntry<>(CAPABILITY_ID, new
+                            CapabilityDefinition())).collect(
+                            Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
 
-        DataModelUtil.addNodeTypeCapabilitiesDef(null, capabilityDefinitionMap);
+            DataModelUtil.addNodeTypeCapabilitiesDef(null, capabilityDefinitionMap);
+        });
     }
 
     @Test
@@ -273,14 +276,16 @@ public class DataModelUtilTest {
         assertNull(nodeType.getCapabilities());
     }
 
-    @Test(expected = CoreException.class)
-    public void testSetNodeTypeCapabilitiesDefThrowsException() {
-        Map<String, CapabilityDefinition> capabilityDefinitionMap =
-                Stream.of(new AbstractMap.SimpleEntry<>(CAPABILITY_ID,
-                        new CapabilityDefinition())).collect(
-                        Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
+    @Test
+    public void testSetNodeTypeCapabilitiesDefThrowsException() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            Map<String, CapabilityDefinition> capabilityDefinitionMap =
+                    Stream.of(new AbstractMap.SimpleEntry<>(CAPABILITY_ID,
+                            new CapabilityDefinition())).collect(
+                            Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
 
-        DataModelUtil.setNodeTypeCapabilitiesDef(null, capabilityDefinitionMap);
+            DataModelUtil.setNodeTypeCapabilitiesDef(null, capabilityDefinitionMap);
+        });
     }
 
     @Test
@@ -365,9 +370,11 @@ public class DataModelUtilTest {
         DataModelUtil.addRequirementAssignment(null, REQUIREMENT_ID, new RequirementAssignment());
     }
 
-    @Test(expected = CoreException.class)
-    public void testAddRequirementAssignmentNodeNotAssigned() {
-        DataModelUtil.addRequirementAssignment(new NodeTemplate(), REQUIREMENT_ID, new RequirementAssignment());
+    @Test
+    public void testAddRequirementAssignmentNodeNotAssigned() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            DataModelUtil.addRequirementAssignment(new NodeTemplate(), REQUIREMENT_ID, new RequirementAssignment());
+        });
     }
 
     @Test

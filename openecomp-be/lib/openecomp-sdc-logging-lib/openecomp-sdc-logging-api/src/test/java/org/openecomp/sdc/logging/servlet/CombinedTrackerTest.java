@@ -23,6 +23,7 @@ import static org.mockito.Mockito.verify;
 
 import javax.servlet.http.HttpServletRequest;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test the construction and invocation of combined tracker.
@@ -32,9 +33,11 @@ import org.junit.Test;
  */
 public class CombinedTrackerTest {
 
-    @Test(expected = NullPointerException.class)
-    public void throwExceptionWhenTrackersNull() {
-        new CombinedTracker((Tracker[]) null);
+    @Test
+    public void throwExceptionWhenTrackersNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            new CombinedTracker((Tracker[]) null);
+        });
     }
 
     @Test

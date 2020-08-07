@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.openecomp.sdc.versioning.dao.types.Version;
 import org.openecomp.sdc.versioning.dao.types.VersionStatus;
 import org.openecomp.sdc.versioning.types.VersionCreationMethod;
@@ -57,11 +58,13 @@ public class MajorVersionCalculatorImplTest {
         assertThat(result, is("3.0"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testCalculateFail() {
-        majorVersionCalculator.calculate("1", VersionCreationMethod.major);
+    @Test
+    public void testCalculateFail() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            majorVersionCalculator.calculate("1", VersionCreationMethod.major);
 
-        fail("Should throw IllegalArgumentException");
+            fail("Should throw IllegalArgumentException");
+        });
     }
 
     @Test

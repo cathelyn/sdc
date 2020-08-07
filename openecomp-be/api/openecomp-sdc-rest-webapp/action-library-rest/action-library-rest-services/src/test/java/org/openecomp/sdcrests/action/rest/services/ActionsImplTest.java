@@ -19,22 +19,6 @@
 package org.openecomp.sdcrests.action.rest.services;
 
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
-import static org.openecomp.sdc.action.ActionConstants.X_OPEN_ECOMP_INSTANCE_ID_HEADER_PARAM;
-import static org.openecomp.sdc.action.ActionConstants.X_OPEN_ECOMP_REQUEST_ID_HEADER_PARAM;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response;
 import org.apache.cxf.attachment.AttachmentDataSource;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.junit.Assert;
@@ -50,6 +34,24 @@ import org.openecomp.sdc.action.types.Action;
 import org.openecomp.sdc.action.types.ActionArtifact;
 import org.openecomp.sdc.action.types.ActionStatus;
 import org.openecomp.sdc.action.types.OpenEcompComponent;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
+import static org.openecomp.sdc.action.ActionConstants.X_OPEN_ECOMP_INSTANCE_ID_HEADER_PARAM;
+import static org.openecomp.sdc.action.ActionConstants.X_OPEN_ECOMP_REQUEST_ID_HEADER_PARAM;
 
 public class ActionsImplTest {
 
@@ -87,12 +89,15 @@ public class ActionsImplTest {
         Assert.assertEquals(200, actionsByActionInvariantUuId.getStatus());
     }
 
-    @Test(expected = ActionException.class)
-    public void testGetActionsByActionInvariantUuIdShouldThrowExceptionWhenActionIsEmpty() {
-        when(request.getQueryString()).thenReturn("queryString");
-        when(actionManager.getActionsByActionUuId(anyString())).thenReturn(new Action());
+    @Test
+    public void testGetActionsByActionInvariantUuIdShouldThrowExceptionWhenActionIsEmpty() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            when(request.getQueryString()).thenReturn("queryString");
+            when(actionManager.getActionsByActionUuId(anyString())).thenReturn(new Action());
 
-        action.getActionsByActionInvariantUuId("actionInvariantUuId", "actionUUID", request);
+            action.getActionsByActionInvariantUuId("actionInvariantUuId", "actionUUID", request);
+        });
+
     }
 
     @Test
@@ -103,10 +108,12 @@ public class ActionsImplTest {
         Assert.assertEquals(200, action.getOpenEcompComponents(request).getStatus());
     }
 
-    @Test(expected = ActionException.class)
-    public void testGetOpenEcompComponentsShouldCatchActionException() {
-        when(actionManager.getOpenEcompComponents()).thenThrow(new ActionException());
-         action.getOpenEcompComponents(request).getStatus();
+    @Test
+    public void testGetOpenEcompComponentsShouldCatchActionException() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            when(actionManager.getOpenEcompComponents()).thenThrow(new ActionException());
+            action.getOpenEcompComponents(request).getStatus();
+        });
     }
 
     @Test
@@ -168,28 +175,32 @@ public class ActionsImplTest {
         Assert.assertEquals(200, filteredActions.getStatus());
     }
 
-    @Test(expected = ActionException.class)
-    public void testGetFilteredActionsShouldThrowActionExceptionWhenNumberOfFiltersAreZero() {
-        when(request.getQueryString()).thenReturn("queryString");
-        when(actionManager.getFilteredActions(anyString(), anyString())).thenReturn(mockActionsToReturn());
-        action.getFilteredActions(null, null, null, null,
-                null, request);
-
+    @Test
+    public void testGetFilteredActionsShouldThrowActionExceptionWhenNumberOfFiltersAreZero() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            when(request.getQueryString()).thenReturn("queryString");
+            when(actionManager.getFilteredActions(anyString(), anyString())).thenReturn(mockActionsToReturn());
+            action.getFilteredActions(null, null, null, null,
+                    null, request);
+        });
     }
 
     @Test
     public void testCreateActionShouldPassForHappyScenario() {
-    String requestJson = "{actionUuId : actionUuId, actionInvariantUuId : actionInvariantUuId," +
-            " name : actionToCreate, version: 2.1 }";
+        String requestJson = "{actionUuId : actionUuId, actionInvariantUuId : actionInvariantUuId," +
+                " name : actionToCreate, version: 2.1 }";
         when(actionManager.createAction(any(Action.class), anyString())).thenReturn(createAction());
         Assert.assertEquals(200, action.createAction( requestJson, request).getStatus());
     }
-    @Test(expected = ActionException.class)
-    public void testCreateActionShouldFailForInvalidRequestJson() {
-        String requestJson = "{actionUuId : actionUuId, actionInvariantUuId : actionInvariantUuId," +
-                "  version: 2.1 }";
-        when(actionManager.createAction(any(Action.class), anyString())).thenReturn(createAction());
-        action.createAction( requestJson, request);
+
+    @Test
+    public void testCreateActionShouldFailForInvalidRequestJson() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            String requestJson = "{actionUuId : actionUuId, actionInvariantUuId : actionInvariantUuId," +
+                    "  version: 2.1 }";
+            when(actionManager.createAction(any(Action.class), anyString())).thenReturn(createAction());
+            action.createAction( requestJson, request);
+        });
     }
 
     @Test
@@ -203,20 +214,22 @@ public class ActionsImplTest {
         Assert.assertEquals(200, action.updateAction("invariantUUID", requestJson, request).getStatus());
     }
 
-    @Test(expected = ActionException.class)
-    public void testUpdateActionShouldThrowActionExceptionWhenActionManagerUpdateFails() {
-        String requestJson = "{actionUuId : actionUuId, actionInvariantUuId : actionInvariantUuId," +
-                " name : actionToUpdate, version: 2.2 }";
+    @Test
+    public void testUpdateActionShouldThrowActionExceptionWhenActionManagerUpdateFails() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            String requestJson = "{actionUuId : actionUuId, actionInvariantUuId : actionInvariantUuId," +
+                    " name : actionToUpdate, version: 2.2 }";
 
-        when(request.getRemoteUser()).thenReturn("remoteUser");
-        when(actionManager.updateAction(any(Action.class), anyString())).thenThrow(new ActionException());
-        action.updateAction("invariantUUID", requestJson, request);
+            when(request.getRemoteUser()).thenReturn("remoteUser");
+            when(actionManager.updateAction(any(Action.class), anyString())).thenThrow(new ActionException());
+            action.updateAction("invariantUUID", requestJson, request);
+        });
     }
 
     @Test
     public void testDeleteActionShouldPassForHappyScenario() {
-       Assert.assertEquals(200, action.deleteAction("actionInvariantUUID", request).getStatus());
-       Mockito.verify(actionManager, times(1)).deleteAction(anyString(), anyString());
+        Assert.assertEquals(200, action.deleteAction("actionInvariantUUID", request).getStatus());
+        Mockito.verify(actionManager, times(1)).deleteAction(anyString(), anyString());
     }
 
     @Test
@@ -225,7 +238,7 @@ public class ActionsImplTest {
         when(request.getRemoteUser()).thenReturn("remoteUser");
         when(actionManager.checkout(anyString(), anyString())).thenReturn(createAction());
 
-       Assert.assertEquals(200, action.actOnAction("invariantUUID", requestJson, request).getStatus());
+        Assert.assertEquals(200, action.actOnAction("invariantUUID", requestJson, request).getStatus());
 
     }
 
@@ -255,11 +268,13 @@ public class ActionsImplTest {
     }
 
 
-    @Test(expected = ActionException.class)
-    public void testActOnActionShouldThrowActionExceptionWhenPassingInvalidAction() {
-        String requestJson = "{status : Status}";
-        when(request.getRemoteUser()).thenReturn("remoteUser");
-        action.actOnAction("invariantUUID", requestJson, request);
+    @Test
+    public void testActOnActionShouldThrowActionExceptionWhenPassingInvalidAction() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            String requestJson = "{status : Status}";
+            when(request.getRemoteUser()).thenReturn("remoteUser");
+            action.actOnAction("invariantUUID", requestJson, request);
+        });
     }
 
 
@@ -281,14 +296,15 @@ public class ActionsImplTest {
         Assert.assertEquals(200, response.getStatus());
     }
 
-    @Test(expected = ActionException.class)
+    @Test
     public void testUploadArtifactShouldThrowActionExceptionWhenArtifactToUploadIsNull() throws IOException {
-        when(request.getContentType()).thenReturn("contentType");
-        action.uploadArtifact("actionInvariantUUID", "artifactName", "artifactLabel",
-                "artifactCategory", "artifactDescription", "readOnly",
-                "d41d8cd98f00b204e9800998ecf8427e",
-                null, request);
-
+        assertThrows(ActionException.class, () -> {
+            when(request.getContentType()).thenReturn("contentType");
+            action.uploadArtifact("actionInvariantUUID", "artifactName", "artifactLabel",
+                    "artifactCategory", "artifactDescription", "readOnly",
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    null, request);
+        });
     }
 
     @Test
@@ -303,11 +319,12 @@ public class ActionsImplTest {
         Assert.assertEquals(200, response.getStatus());
     }
 
-    @Test(expected = ActionException.class)
-    public void testDownloadArtifactShouldThrowActionExceptionWhenReDownloadedArtifactIsEmpty() {
-
-        when(actionManager.downloadArtifact(anyString(), anyString())).thenReturn(new ActionArtifact());
-        action.downloadArtifact("actionUUID", "artifactUUID", request);
+    @Test
+    public void testDownloadArtifactShouldThrowActionExceptionWhenReDownloadedArtifactIsEmpty() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            when(actionManager.downloadArtifact(anyString(), anyString())).thenReturn(new ActionArtifact());
+            action.downloadArtifact("actionUUID", "artifactUUID", request);
+        });
     }
 
     @Test
@@ -336,21 +353,21 @@ public class ActionsImplTest {
     }
 
 
-    @Test(expected = ActionException.class)
+    @Test
     public void testUpdateArtifactShouldThrowActionExceptionWhenCheckSumDidNotMatchWithCalculatedCheckSum() throws IOException {
+        assertThrows(ActionException.class, () -> {
+            Attachment artifactToUpdate = new Attachment("id", "mediaType", new Object());
+            DataSource dataSource = new AttachmentDataSource("ctParam", new ByteArrayInputStream(new byte[0]));
+            DataHandler dataHandler = new DataHandler(dataSource);
+            artifactToUpdate.setDataHandler(dataHandler);
 
-        Attachment artifactToUpdate = new Attachment("id", "mediaType", new Object());
-        DataSource dataSource = new AttachmentDataSource("ctParam", new ByteArrayInputStream(new byte[0]));
-        DataHandler dataHandler = new DataHandler(dataSource);
-        artifactToUpdate.setDataHandler(dataHandler);
-
-        when(request.getContentType()).thenReturn("contentType");
-        action.updateArtifact("actionInvariantUUID", "artifactUUID", "artifactName",
-                "artifactLabel",
-                "artifactCategory", "artifactDescription", "readWrite",
-                "checksum",
-                artifactToUpdate, request);
-
+            when(request.getContentType()).thenReturn("contentType");
+            action.updateArtifact("actionInvariantUUID", "artifactUUID", "artifactName",
+                    "artifactLabel",
+                    "artifactCategory", "artifactDescription", "readWrite",
+                    "checksum",
+                    artifactToUpdate, request);
+        });
     }
 
     private List<Action> mockActionsToReturn() {

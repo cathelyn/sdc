@@ -24,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.openecomp.core.utilities.file.FileUtils;
 
 public class JsonSchemaDataGeneratorTest {
@@ -53,9 +54,11 @@ public class JsonSchemaDataGeneratorTest {
                         + "\"phoneNumber\":[{\"code\":1,\"location\":\"Home\"},{\"code\":2,\"location\":\"Office\"}]}"));
     }
 
-    @Test(expected = JSONException.class)
-    public void testSchemaWithInvalidDefault() {
-        testGenerate(SCHEMA_WITH_INVALID_DEFAULT, null);
+    @Test
+    public void testSchemaWithInvalidDefault() throws Exception {
+        assertThrows(JSONException.class, () -> {
+            testGenerate(SCHEMA_WITH_INVALID_DEFAULT, null);
+        });
     }
 
     @Test
@@ -64,9 +67,11 @@ public class JsonSchemaDataGeneratorTest {
                 new JSONObject("{\"ipConfiguration\":{\"ipv4Required\":true,\"ipv6Required\":false}}"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testConstructorException() {
-        Assert.assertNull(new JsonSchemaDataGenerator(null));
+    @Test
+    public void testConstructorException() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Assert.assertNull(new JsonSchemaDataGenerator(null));
+        });
     }
 
     private void testGenerate(String schema, JSONObject expectedData) {

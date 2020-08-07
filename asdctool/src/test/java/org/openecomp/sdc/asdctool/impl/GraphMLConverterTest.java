@@ -30,6 +30,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class GraphMLConverterTest {
@@ -65,11 +66,12 @@ public class GraphMLConverterTest {
         assertTrue(testSubject.findErrorInJsonGraph(args));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testOpenGraphWithBadPath() {
-
-        GraphMLConverter testSubject = new GraphMLConverter();
-        testSubject.openGraph("badPath");
+    @Test
+    public void testOpenGraphWithBadPath() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            GraphMLConverter testSubject = new GraphMLConverter();
+            testSubject.openGraph("badPath");
+        });
     }
 
     @Test

@@ -17,6 +17,7 @@
 package org.openecomp.sdc.logging.servlet.spring;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -40,14 +41,18 @@ import org.openecomp.sdc.logging.servlet.Tracker;
  */
 public class LoggingInterceptorTest {
 
-    @Test(expected = NullPointerException.class)
-    public void exceptionThrownWhenPartnerNameHeaderNull() {
-        new LoggingInterceptor(null, mock(HttpHeader.class));
+    @Test
+    public void exceptionThrownWhenPartnerNameHeaderNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            new LoggingInterceptor(null, mock(HttpHeader.class));
+        });
     }
 
-    @Test(expected = NullPointerException.class)
-    public void exceptionThrownWhenRequestIdHeaderNull() {
-        new LoggingInterceptor(mock(HttpHeader.class), null);
+    @Test
+    public void exceptionThrownWhenRequestIdHeaderNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            new LoggingInterceptor(mock(HttpHeader.class), null);
+        });
     }
 
     @Test

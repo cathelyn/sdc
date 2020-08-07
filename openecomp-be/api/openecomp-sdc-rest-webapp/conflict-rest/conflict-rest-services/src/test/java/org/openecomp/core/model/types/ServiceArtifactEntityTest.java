@@ -34,6 +34,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -76,12 +77,14 @@ public class ServiceArtifactEntityTest {
         assertArrayEquals(IOUtils.toByteArray(serviceArtifact.getContent()), IOUtils.toByteArray(actual.getContent()));
     }
 
-    @Test(expected = SdcRuntimeException.class)
-    public void shouldFailOnNullContentBytesSupplied() {
-        ServiceArtifact serviceArtifactMock = mock(ServiceArtifact.class);
-        given(serviceArtifactMock.getContent()).willAnswer(invocation -> { throw new IOException("Test exception"); } );
-        ServiceArtifactEntity entity =
-                new ServiceArtifactEntity(serviceArtifactMock);
+    @Test
+    public void shouldFailOnNullContentBytesSupplied() throws Exception {
+        assertThrows(SdcRuntimeException.class, () -> {
+            ServiceArtifact serviceArtifactMock = mock(ServiceArtifact.class);
+            given(serviceArtifactMock.getContent()).willAnswer(invocation -> { throw new IOException("Test exception"); } );
+            ServiceArtifactEntity entity =
+                    new ServiceArtifactEntity(serviceArtifactMock);
+        });
     }
 
     private static ServiceArtifact createServiceArtifact() {

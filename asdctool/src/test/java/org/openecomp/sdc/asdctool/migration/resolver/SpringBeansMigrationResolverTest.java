@@ -30,8 +30,8 @@ import org.openecomp.sdc.asdctool.migration.core.task.MigrationResult;
 import org.openecomp.sdc.asdctool.migration.dao.MigrationTasksDao;
 import org.openecomp.sdc.asdctool.migration.service.SdcRepoService;
 import org.openecomp.sdc.be.dao.cassandra.CassandraClient;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,8 +39,8 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SpringBeansMigrationResolverTest {
 
@@ -53,7 +53,7 @@ public class SpringBeansMigrationResolverTest {
 	private List<Migration> migrations = Arrays.asList(createMigration("1710.1"), createMigration("1710.22"),
 			createMigration("1707.12"), createMigration("1710.3"));
 
-	@BeforeMethod
+	@BeforeEach
     public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		testInstance.setMigrations(migrations);

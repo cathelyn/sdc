@@ -34,7 +34,7 @@ import org.openecomp.sdc.be.datatypes.enums.GraphPropertyEnum;
 import org.openecomp.sdc.be.model.Component;
 import org.openecomp.sdc.be.model.Resource;
 import org.openecomp.sdc.be.model.jsonjanusgraph.operations.ToscaOperationFacade;
-import org.testng.Assert;
+import org.junit.jupiter.api.Assertions.assertFalse;
 
 public interface ArtifactValidatorExecutorContract {
 
@@ -70,6 +70,6 @@ public interface ArtifactValidatorExecutorContract {
 
         // Initially no outputFilePath was passed to this function (hence it is set to null)
         // TODO: Fix this null and see if the argument is used by this function
-        Assert.assertFalse(testSubject.validate(vertices, null));
+        assertFalse(testSubject.validate(vertices, null));
     }
 }

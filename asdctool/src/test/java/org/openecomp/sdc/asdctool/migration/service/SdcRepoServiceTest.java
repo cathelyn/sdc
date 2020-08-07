@@ -27,14 +27,14 @@ import org.mockito.internal.verification.Times;
 import org.openecomp.sdc.asdctool.migration.core.DBVersion;
 import org.openecomp.sdc.asdctool.migration.dao.MigrationTasksDao;
 import org.openecomp.sdc.be.resources.data.MigrationTaskEntry;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Each;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SdcRepoServiceTest {
 
@@ -44,7 +44,7 @@ public class SdcRepoServiceTest {
     @Mock
     private MigrationTasksDao migrationTasksDaoMock;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }

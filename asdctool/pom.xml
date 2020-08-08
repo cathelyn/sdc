@@ -467,6 +467,8 @@
       <scope>test</scope>
     </dependency>
 
+    <junit-jupiter.version>5.5.0</junit-jupiter.version>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>

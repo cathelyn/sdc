@@ -27,7 +27,7 @@ import org.mockito.internal.verification.Times;
 import org.openecomp.sdc.asdctool.migration.core.DBVersion;
 import org.openecomp.sdc.asdctool.migration.dao.MigrationTasksDao;
 import org.openecomp.sdc.be.resources.data.MigrationTaskEntry;
-import org.junit.jupiter.api.Each;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;

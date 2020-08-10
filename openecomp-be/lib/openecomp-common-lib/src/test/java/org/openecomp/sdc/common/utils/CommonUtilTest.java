@@ -22,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.onap.sdc.tosca.services.CommonUtil.DEFAULT;
 import static org.onap.sdc.tosca.services.CommonUtil.UNDERSCORE_DEFAULT;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.io.Files;
 import java.io.File;
@@ -33,7 +33,7 @@ import org.openecomp.core.utilities.file.FileContentHandler;
 import org.openecomp.core.utilities.orchestration.OnboardingTypesEnum;
 import org.openecomp.sdc.common.errors.CoreException;
 import org.openecomp.sdc.common.zip.exception.ZipException;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 public class CommonUtilTest {
     private static final String VALID_ZIP_FILE_PATH = "src/test/resources/valid.zip";

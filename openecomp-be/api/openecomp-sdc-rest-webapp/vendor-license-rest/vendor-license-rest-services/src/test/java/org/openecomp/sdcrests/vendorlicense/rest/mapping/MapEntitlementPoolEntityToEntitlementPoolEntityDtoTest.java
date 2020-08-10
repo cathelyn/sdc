@@ -16,7 +16,7 @@
 
 package org.openecomp.sdcrests.vendorlicense.rest.mapping;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,7 +27,7 @@ import org.openecomp.sdc.vendorlicense.dao.types.EntitlementPoolType;
 import org.openecomp.sdc.vendorlicense.dao.types.MultiChoiceOrOther;
 import org.openecomp.sdc.vendorlicense.dao.types.OperationalScope;
 import org.openecomp.sdcrests.vendorlicense.types.EntitlementPoolEntityDto;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class MapEntitlementPoolEntityToEntitlementPoolEntityDtoTest {

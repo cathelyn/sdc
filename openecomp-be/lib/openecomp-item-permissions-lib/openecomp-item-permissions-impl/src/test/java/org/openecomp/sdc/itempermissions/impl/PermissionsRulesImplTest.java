@@ -26,9 +26,10 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.openecomp.sdc.common.errors.CoreException;
 import org.openecomp.sdc.itempermissions.dao.impl.PermissionsServicesImpl;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 
@@ -56,7 +57,7 @@ public class PermissionsRulesImplTest {
   private PermissionsRulesImpl permissionsRules;
 
 
-  @BeforeMethod
+  @BeforeEach
   public void setUp() throws Exception {
 
     MockitoAnnotations.initMocks(this);
@@ -76,32 +77,32 @@ public class PermissionsRulesImplTest {
 
   @Test
   public void testIsAllowedCaseSubmitOwner(){
-    Assert.assertTrue(permissionsRules.isAllowed(PERMISSION_OWNER,SUBMIT_ACTION));
+    assertTrue(permissionsRules.isAllowed(PERMISSION_OWNER,SUBMIT_ACTION));
   }
 
   @Test
   public void testIsAllowedCaseSubmitNotOwner(){
-    Assert.assertTrue(permissionsRules.isAllowed(PERMISSION_CONTRIBUTOR,SUBMIT_ACTION));
+    assertTrue(permissionsRules.isAllowed(PERMISSION_CONTRIBUTOR,SUBMIT_ACTION));
   }
 
   @Test
   public void testIsAllowedCaseEditOwner(){
-    Assert.assertTrue(permissionsRules.isAllowed(PERMISSION_OWNER,EDIT_ACTION));
+    assertTrue(permissionsRules.isAllowed(PERMISSION_OWNER,EDIT_ACTION));
   }
 
   @Test
   public void testIsAllowedCaseEditContributer(){
-    Assert.assertTrue(permissionsRules.isAllowed(PERMISSION_CONTRIBUTOR,EDIT_ACTION));
+    assertTrue(permissionsRules.isAllowed(PERMISSION_CONTRIBUTOR,EDIT_ACTION));
   }
 
   @Test
   public void testIsAllowedCaseChangePermissionsContributer(){
-    Assert.assertFalse(permissionsRules.isAllowed(PERMISSION_CONTRIBUTOR,CHANGE_PERMISSIONS_ACTION));
+    assertFalse(permissionsRules.isAllowed(PERMISSION_CONTRIBUTOR,CHANGE_PERMISSIONS_ACTION));
   }
 
   @Test
   public void testIsAllowedCaseChangePermissionsOwner(){
-    Assert.assertTrue(permissionsRules.isAllowed(PERMISSION_OWNER,CHANGE_PERMISSIONS_ACTION));
+    assertTrue(permissionsRules.isAllowed(PERMISSION_OWNER,CHANGE_PERMISSIONS_ACTION));
   }
 
   @Test(expectedExceptions = CoreException.class,expectedExceptionsMessageRegExp =

@@ -19,8 +19,10 @@ package org.openecomp.sdc.heat.services.tree;
 import org.openecomp.core.utilities.file.FileContentHandler;
 import org.openecomp.core.utilities.file.FileUtils;
 import org.openecomp.sdc.heat.datatypes.structure.HeatStructureTree;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,8 +52,8 @@ public class HeatTreeManagerTest {
     HeatTreeManager heatTreeManager = HeatTreeManagerUtil.initHeatTreeManager(fileContentMap);
     heatTreeManager.createTree();
     HeatStructureTree tree = heatTreeManager.getTree();
-    Assert.assertNotNull(tree);
-    Assert.assertEquals(tree.getHeat().size(), 2);
+    assertNotNull(tree);
+    assertEquals(tree.getHeat().size(), 2);
   }
 
   @Test
@@ -74,8 +76,8 @@ public class HeatTreeManagerTest {
     HeatTreeManager heatTreeManager = HeatTreeManagerUtil.initHeatTreeManager(fileContentMap);
     heatTreeManager.createTree();
     HeatStructureTree tree = heatTreeManager.getTree();
-    Assert.assertNotNull(tree);
-    Assert.assertEquals(tree.getHeat().size(), 3);
+    assertNotNull(tree);
+    assertEquals(tree.getHeat().size(), 3);
     verifyHeatArtifacts(tree, "ocgmgr.yaml", 1);
     verifyHeatArtifacts(tree, "ocgapp.yaml", 0);
     verifyHeatArtifacts(tree, "base_ocg.yaml", 0);
@@ -84,12 +86,12 @@ public class HeatTreeManagerTest {
 
   private void verifyHeatArtifacts(HeatStructureTree tree, String heatName, int expectedArtifactNum ) {
     HeatStructureTree heat = HeatStructureTree.getHeatStructureTreeByName(tree.getHeat(), heatName);
-    Assert.assertNotNull(heat);
+    assertNotNull(heat);
     if (expectedArtifactNum > 0) {
-      Assert.assertNotNull(heat.getArtifacts());
-      Assert.assertEquals(heat.getArtifacts().size(), expectedArtifactNum);
+      assertNotNull(heat.getArtifacts());
+      assertEquals(heat.getArtifacts().size(), expectedArtifactNum);
     } else {
-      Assert.assertNull(heat.getArtifacts());
+      assertNull(heat.getArtifacts());
     }
   }
 

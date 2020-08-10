@@ -23,9 +23,10 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.openecomp.sdc.common.errors.CoreException;
 import org.openecomp.sdc.common.session.SessionContext;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class AsdcSessionContextProviderTest {
 
@@ -34,7 +35,7 @@ public class AsdcSessionContextProviderTest {
     @InjectMocks
     private AsdcSessionContextProvider asdcSessionContextProvider;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
@@ -56,8 +57,8 @@ public class AsdcSessionContextProviderTest {
         asdcSessionContextProvider.create(USER_ID, "tenant");
         SessionContext sessionContext = asdcSessionContextProvider.get();
 
-        Assert.assertNotNull(sessionContext);
-        Assert.assertSame(USER_ID, sessionContext.getUser().getUserId());
-        Assert.assertSame("tenant", sessionContext.getTenant());
+        assertNotNull(sessionContext);
+        assertSame(USER_ID, sessionContext.getUser().getUserId());
+        assertSame("tenant", sessionContext.getTenant());
     }
 }

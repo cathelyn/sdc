@@ -25,8 +25,8 @@ import org.openecomp.sdc.notification.services.NotificationPropagationManager;
 import org.openecomp.sdc.notification.services.SubscriptionService;
 import org.openecomp.sdc.versioning.AsdcItemManager;
 import org.openecomp.sdc.versioning.types.Item;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import import org.junit.jupiter.api.BeforeEach;;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -38,8 +38,8 @@ import java.util.stream.Stream;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.openecomp.sdc.itempermissions.notifications.NotificationConstants.*;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by ayalaben on 7/6/2017
@@ -70,7 +70,7 @@ public class PermissionsManagerImplTest {
   private PermissionsManagerImpl permissionsManager;
 
 
-  @BeforeMethod
+  @BeforeEach
   public void setUp() throws Exception {
     SessionContextProviderFactory.getInstance().createInterface().create(USER,
         tenant);

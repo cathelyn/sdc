@@ -70,7 +70,7 @@ public class CommonUtilTest {
         assertThat(fch.containsFile("file.two.yaml"), is(true));
     }
 
-    @Test(expectedExceptions={CoreException.class})
+    @Test
     public void testValidateNoFolders() throws IOException {
         byte[] file = getFileAsBytes(VALID_ZIP_WITH_DIR_FILE_PATH);
 

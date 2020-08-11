@@ -73,12 +73,13 @@ public class PermissionsRulesImplTest {
     assertTrue(thrown.getMessage().contains("Invalid permission type"));
   }
 
-  @Test(expectedExceptionsMessageRegExp =
-          "Invalid action type")
+  @Test
   public void testIsAllowedWhenInvalidAction() throws Exception {
-    assertThrows(CoreException.class, () -> {
+    CoreException thrown = assertThrows(CoreException.class, () -> {
       permissionsRules.isAllowed(PERMISSION_CONTRIBUTOR, INVALID_ACTION);
     });
+
+    assertTrue(thrown.getMessage().contains("Invalid action type"));
   }
 
   @Test
@@ -111,19 +112,23 @@ public class PermissionsRulesImplTest {
     assertTrue(permissionsRules.isAllowed(PERMISSION_OWNER,CHANGE_PERMISSIONS_ACTION));
   }
 
-  @Test(expectedExceptionsMessageRegExp =
-          "Invalid permission type")
+  @Test
   public void testUpdatePermissionWhenInvalidPermission() throws Exception {
-    assertThrows(CoreException.class, () -> {
+    CoreException thrown = assertThrows(CoreException.class, () -> {
       permissionsRules.updatePermission(ITEM1_ID,USER1_ID,INVALID_PERMISSION,new HashSet<String>(),
               new HashSet<String>());
     });
+
+    assertTrue(thrown.getMessage().contains("Invalid permission type"));
   }
 
-  @Test(expectedExceptions = CoreException.class,expectedExceptionsMessageRegExp =
-          "Invalid action type")
-  public void testExecuteActionInvalidAction(){
-    permissionsRules.executeAction(ITEM1_ID,USER1_ID,INVALID_ACTION);
+  @Test
+  public void testExecuteActionInvalidAction() throws Exception {
+    CoreExpection thrown = assertThrows(CoreException.class, () -> {
+      permissionsRules.executeAction(ITEM1_ID,USER1_ID,INVALID_ACTION);
+    });
+
+    assertTrue(thrown.getMessage().contains("Invalid action type"));
   }
 
 

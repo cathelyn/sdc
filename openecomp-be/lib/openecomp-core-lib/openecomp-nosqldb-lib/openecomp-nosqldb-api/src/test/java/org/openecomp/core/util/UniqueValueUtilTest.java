@@ -99,7 +99,7 @@ public class UniqueValueUtilTest {
         Mockito.verify(uniqueValueDao, Mockito.times(1)).get(Mockito.any());
     }
 
-    @Test(expectedExceptions = CoreException.class)
+    @Test
     public void testValidateUniqueValueNotUnique() throws Exception{
         assertThrows(CoreException.class, () -> {
             Mockito.when(uniqueValueDao.get(Mockito.any())).thenReturn(new UniqueValueEntity());

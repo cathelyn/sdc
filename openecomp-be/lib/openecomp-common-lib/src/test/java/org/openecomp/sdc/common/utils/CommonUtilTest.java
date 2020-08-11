@@ -23,6 +23,7 @@ import static org.junit.Assert.fail;
 import static org.onap.sdc.tosca.services.CommonUtil.DEFAULT;
 import static org.onap.sdc.tosca.services.CommonUtil.UNDERSCORE_DEFAULT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.google.common.io.Files;
 import java.io.File;
@@ -72,9 +73,13 @@ public class CommonUtilTest {
 
     @Test
     public void testValidateNoFolders() throws IOException {
-        byte[] file = getFileAsBytes(VALID_ZIP_WITH_DIR_FILE_PATH);
+        assertThrows(CoreException.class, () -> {
 
-        FileContentHandler fch = CommonUtil.validateAndUploadFileContent(OnboardingTypesEnum.ZIP, file);
+            byte[] file = getFileAsBytes(VALID_ZIP_WITH_DIR_FILE_PATH);
+
+            FileContentHandler fch = CommonUtil.validateAndUploadFileContent(OnboardingTypesEnum.ZIP, file);
+
+        });
 
         fail("Should throw CoreException");
     }

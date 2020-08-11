@@ -47,18 +47,19 @@ public class VersioningUtilTest {
 
     }
 
-    @Test(expected = CoreException.class)
-    public void testResolveVersionNegative() {
-        Version version = new Version();
-        version.setMajor(1);
-        version.setMinor(1);
+    @Test
+    public void testResolveVersionNegative() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            Version version = new Version();
+            version.setMajor(1);
+            version.setMinor(1);
 
-        VersionInfo versionInfo = new VersionInfo();
-        versionInfo.setActiveVersion(version);
-        versionInfo.setViewableVersions(Arrays.asList(new Version()));
-        versionInfo.setLockingUser("user");
-        VersioningUtil.resolveVersion(null, versionInfo, "user");
-
+            VersionInfo versionInfo = new VersionInfo();
+            versionInfo.setActiveVersion(version);
+            versionInfo.setViewableVersions(Arrays.asList(new Version()));
+            versionInfo.setLockingUser("user");
+            VersioningUtil.resolveVersion(null, versionInfo, "user");
+        });
     }
 
     @Test
@@ -69,17 +70,18 @@ public class VersioningUtilTest {
         versionInfo.setViewableVersions(Arrays.asList(version));
         versionInfo.setLatestFinalVersion(version);
         Assert.assertNotNull(VersioningUtil.resolveVersion(null, versionInfo, true));
-
     }
 
-    @Test(expected = CoreException.class)
-    public void testResolveVersionWithNonFinalVersions() {
-        Version version = new Version();
-        VersionInfo versionInfo = new VersionInfo();
-        versionInfo.setActiveVersion(version);
-        versionInfo.setViewableVersions(Arrays.asList(new Version()));
-        versionInfo.setLatestFinalVersion(version);
-        VersioningUtil.resolveVersion(version, versionInfo,true);
+    @Test
+    public void testResolveVersionWithNonFinalVersions() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            Version version = new Version();
+            VersionInfo versionInfo = new VersionInfo();
+            versionInfo.setActiveVersion(version);
+            versionInfo.setViewableVersions(Arrays.asList(new Version()));
+            versionInfo.setLatestFinalVersion(version);
+            VersioningUtil.resolveVersion(version, versionInfo,true);
+        });
     }
 
     @Test
@@ -92,67 +94,79 @@ public class VersioningUtilTest {
 
     }
 
-    @Test(expected = CoreException.class)
-    public void testResolveVersionWithoutFinalVersion() {
-        Version version = new Version();
-        VersionInfo versionInfo = new VersionInfo();
-        versionInfo.setActiveVersion(version);
-        versionInfo.setViewableVersions(Arrays.asList(version));
-        VersioningUtil.resolveVersion(null, versionInfo, true);
-
+    @Test
+    public void testResolveVersionWithoutFinalVersion() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            Version version = new Version();
+            VersionInfo versionInfo = new VersionInfo();
+            versionInfo.setActiveVersion(version);
+            versionInfo.setViewableVersions(Arrays.asList(version));
+            VersioningUtil.resolveVersion(null, versionInfo, true);
+        });
     }
 
-    @Test(expected = CoreException.class)
-    public void testResolveVersionFinalOnlyNegative() {
-        Version version = new Version();
-        VersionInfo versionInfo = new VersionInfo();
-        versionInfo.setActiveVersion(version);
-        versionInfo.setViewableVersions(Arrays.asList(version));
-        versionInfo.setLatestFinalVersion(version);
-        VersioningUtil.resolveVersion(version, versionInfo, true);
-
+    @Test
+    public void testResolveVersionFinalOnlyNegative() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            Version version = new Version();
+            VersionInfo versionInfo = new VersionInfo();
+            versionInfo.setActiveVersion(version);
+            versionInfo.setViewableVersions(Arrays.asList(version));
+            versionInfo.setLatestFinalVersion(version);
+            VersioningUtil.resolveVersion(version, versionInfo, true);
+        });
     }
 
-    @Test(expected = CoreException.class)
-    public void testValidateEntityExistence() {
-        VersioningUtil.validateEntityExistence(null, new VersionableEntityImplStub(), "firstClassCitizenType");
+    @Test
+    public void testValidateEntityExistence() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            VersioningUtil.validateEntityExistence(null, new VersionableEntityImplStub(), "firstClassCitizenType");
+        });
     }
 
-    @Test(expected = CoreException.class)
-    public void testValidateEntitiesExistence() {
-        Set<String> entityIds = new HashSet<>();
-        entityIds.add("id1");
-        entityIds.add("id2");
-        VersioningUtil.validateEntitiesExistence(entityIds, new VersionableEntityImplStub(),
-                new VersionInfoDaoImplStub(),"firstClassCitizenType");
+    @Test
+    public void testValidateEntitiesExistence() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            Set<String> entityIds = new HashSet<>();
+            entityIds.add("id1");
+            entityIds.add("id2");
+            VersioningUtil.validateEntitiesExistence(entityIds, new VersionableEntityImplStub(),
+                    new VersionInfoDaoImplStub(),"firstClassCitizenType");
+        });
     }
 
-    @Test(expected = CoreException.class)
-    public void testValidateEntitiesExistenceSizeOne() {
-        Set<String> entityIds = new HashSet<>();
-        entityIds.add("id1");
-        VersioningUtil.validateEntitiesExistence(entityIds, new VersionableEntityImplStub(),
-                new VersionInfoDaoImplStub(),"firstClassCitizenType");
+    @Test
+    public void testValidateEntitiesExistenceSizeOne() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            Set<String> entityIds = new HashSet<>();
+            entityIds.add("id1");
+            VersioningUtil.validateEntitiesExistence(entityIds, new VersionableEntityImplStub(),
+                    new VersionInfoDaoImplStub(),"firstClassCitizenType");
+        });
     }
 
-    @Test(expected = CoreException.class)
-    public void testValidateContainedEntitiesExistence() {
-        Set<String> inputContainedEntityIds = new HashSet<>();
-        inputContainedEntityIds.add("id1");
-        inputContainedEntityIds.add("id2");
-        Set<String> retrievedContainedEntityIds = new HashSet<>();
-        VersioningUtil.validateContainedEntitiesExistence("containedEntityType",
-                inputContainedEntityIds, new VersionableEntityImplStub(), retrievedContainedEntityIds);
+    @Test
+    public void testValidateContainedEntitiesExistence() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            Set<String> inputContainedEntityIds = new HashSet<>();
+            inputContainedEntityIds.add("id1");
+            inputContainedEntityIds.add("id2");
+            Set<String> retrievedContainedEntityIds = new HashSet<>();
+            VersioningUtil.validateContainedEntitiesExistence("containedEntityType",
+                    inputContainedEntityIds, new VersionableEntityImplStub(), retrievedContainedEntityIds);
+        });
     }
 
-    @Test(expected = CoreException.class)
-    public void testValidateContainedEntitiesExistenceWithIdOne() {
-        Set<String> inputContainedEntityIds = new HashSet<>();
-        inputContainedEntityIds.add("id1");
-        inputContainedEntityIds.add("id2");
-        Set<String> retrievedContainedEntityIds = new HashSet<>();
-        retrievedContainedEntityIds.add("id1");
-        VersioningUtil.validateContainedEntitiesExistence("containedEntityType",
-                inputContainedEntityIds, new VersionableEntityImplStub(), retrievedContainedEntityIds);
+    @Test
+    public void testValidateContainedEntitiesExistenceWithIdOne() throws Exceptionň {
+        assertThrows(CoreException.class, () -> {
+            Set<String> inputContainedEntityIds = new HashSet<>();
+            inputContainedEntityIds.add("id1");
+            inputContainedEntityIds.add("id2");
+            Set<String> retrievedContainedEntityIds = new HashSet<>();
+            retrievedContainedEntityIds.add("id1");
+            VersioningUtil.validateContainedEntitiesExistence("containedEntityType",
+                    inputContainedEntityIds, new VersionableEntityImplStub(), retrievedContainedEntityIds);
+        });
     }
 }

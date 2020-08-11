@@ -19,7 +19,7 @@ package org.openecomp.sdc.versioning.dao.types;
 
 import org.junit.Assert;
 import org.junit.Test;
-import static org.junit.jupiter.api.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class VersionTest {
     @Test

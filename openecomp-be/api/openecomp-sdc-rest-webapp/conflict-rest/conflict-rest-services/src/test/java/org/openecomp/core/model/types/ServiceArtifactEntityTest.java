@@ -76,12 +76,14 @@ public class ServiceArtifactEntityTest {
         assertArrayEquals(IOUtils.toByteArray(serviceArtifact.getContent()), IOUtils.toByteArray(actual.getContent()));
     }
 
-    @Test(expected = SdcRuntimeException.class)
-    public void shouldFailOnNullContentBytesSupplied() {
-        ServiceArtifact serviceArtifactMock = mock(ServiceArtifact.class);
-        given(serviceArtifactMock.getContent()).willAnswer(invocation -> { throw new IOException("Test exception"); } );
-        ServiceArtifactEntity entity =
-                new ServiceArtifactEntity(serviceArtifactMock);
+    @Test
+    public void shouldFailOnNullContentBytesSupplied() throws Exception {
+        assertThrows(SdcRuntimeException.class, () -> {
+            ServiceArtifact serviceArtifactMock = mock(ServiceArtifact.class);
+            given(serviceArtifactMock.getContent()).willAnswer(invocation -> { throw new IOException("Test exception"); } );
+            ServiceArtifactEntity entity =
+                    new ServiceArtifactEntity(serviceArtifactMock);
+        });
     }
 
     private static ServiceArtifact createServiceArtifact() {

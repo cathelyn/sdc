@@ -158,7 +158,7 @@ public class VersioningUtilTest {
     }
 
     @Test
-    public void testValidateContainedEntitiesExistenceWithIdOne() throws Exceptionň {
+    public void testValidateContainedEntitiesExistenceWithIdOne() throws Exception {
         assertThrows(CoreException.class, () -> {
             Set<String> inputContainedEntityIds = new HashSet<>();
             inputContainedEntityIds.add("id1");

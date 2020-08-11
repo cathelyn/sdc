@@ -82,33 +82,34 @@ public class ActionManagerImplTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
         actionManager = new ActionManagerImpl(actionDao, versioningManager, actionArtifactDao,
-            versionInfoDao, uniqueValueDao);
+                versionInfoDao, uniqueValueDao);
     }
 
     @Test
     public void testCreateAction() {
-      Action action = createAction();
-      Version version = createVersion();
-      doReturn(version).when(versioningManager).create(anyString(), anyString(), anyString());
-      doReturn(action).when(actionDao).createAction(any());
-      actionManager.createAction(action, "USER");
-      Mockito.verify(actionDao,times(1)).createAction(any());
+        Action action = createAction();
+        Version version = createVersion();
+        doReturn(version).when(versioningManager).create(anyString(), anyString(), anyString());
+        doReturn(action).when(actionDao).createAction(any());
+        actionManager.createAction(action, "USER");
+        Mockito.verify(actionDao,times(1)).createAction(any());
     }
 
     @Test
-   public void testGetActionsByActionInvariantUuIdShouldPass() {
+    public void testGetActionsByActionInvariantUuIdShouldPass() {
         String invariantId = "invariantId";
         Mockito.when(actionDao.getActionsByActionInvariantUuId(invariantId.toUpperCase())).thenReturn(mockActionsToReturn());
         List<Action> actions = actionManager.getActionsByActionInvariantUuId(invariantId);
         Assert.assertEquals(1, actions.size());
     }
 
-    @Test(expected = ActionException.class)
-    public void testGetActionsByActionInvariantUuIdShouldThrowExceptionWhenReturnedActionsOrEmptyOrNull() {
-        String invariantId = "invariantId";
-        Mockito.when(actionDao.getActionsByActionInvariantUuId(invariantId.toUpperCase())).thenReturn(new ArrayList<>());
-        actionManager.getActionsByActionInvariantUuId(invariantId);
-
+    @Test
+    public void testGetActionsByActionInvariantUuIdShouldThrowExceptionWhenReturnedActionsOrEmptyOrNull() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            String invariantId = "invariantId";
+            Mockito.when(actionDao.getActionsByActionInvariantUuId(invariantId.toUpperCase())).thenReturn(new ArrayList<>());
+            actionManager.getActionsByActionInvariantUuId(invariantId);
+        });
     }
 
     @Test
@@ -119,11 +120,13 @@ public class ActionManagerImplTest {
         Assert.assertEquals(1, actions.size());
     }
 
-    @Test(expected = ActionException.class)
-    public void testGetFilteredActionsShouldThrowExceptionForFilterTypeNameWhenReturnedActionsOrEmptyOrNull() {
-        Mockito.when(actionDao.getFilteredActions(Matchers.anyString(), Matchers.anyString()))
-                .thenReturn(new ArrayList<>());
-        actionManager.getFilteredActions("NAME", ActionConstants.FILTER_TYPE_NAME );
+    @Test
+    public void testGetFilteredActionsShouldThrowExceptionForFilterTypeNameWhenReturnedActionsOrEmptyOrNull() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            Mockito.when(actionDao.getFilteredActions(Matchers.anyString(), Matchers.anyString()))
+                    .thenReturn(new ArrayList<>());
+            actionManager.getFilteredActions("NAME", ActionConstants.FILTER_TYPE_NAME );
+        });
     }
 
     @Test
@@ -164,12 +167,14 @@ public class ActionManagerImplTest {
         Assert.assertNotNull(actionManager.getActionsByActionUuId(actionUuId));
     }
 
-    @Test(expected = ActionException.class)
-    public void testGetActionsByActionUuIdShouldThrowExceptionIfReturnedActionsAreNull() {
-        String actionUuId = "actionUuId";
-        Mockito.when(actionDao.getActionsByActionUuId(actionUuId.toUpperCase()))
-                .thenReturn(null);
-        actionManager.getActionsByActionUuId(actionUuId);
+    @Test
+    public void testGetActionsByActionUuIdShouldThrowExceptionIfReturnedActionsAreNull() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            String actionUuId = "actionUuId";
+            Mockito.when(actionDao.getActionsByActionUuId(actionUuId.toUpperCase()))
+                    .thenReturn(null);
+            actionManager.getActionsByActionUuId(actionUuId);
+        });
     }
 
     @Test
@@ -212,16 +217,18 @@ public class ActionManagerImplTest {
         Mockito.verify(actionDao, times(1)).updateAction(any());
     }
 
-    @Test(expected = ActionException.class)
-    public void testUpdateActionShouldThrowExceptionIfToUpdateAndExistingActionNameIsNotSame() {
-        Action action = createAction();
-        VersionInfo versionInfo = createVersionInfo();
-        Version activeVersion = new Version("2.1");
+    @Test
+    public void testUpdateActionShouldThrowExceptionIfToUpdateAndExistingActionNameIsNotSame() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            Action action = createAction();
+            VersionInfo versionInfo = createVersionInfo();
+            Version activeVersion = new Version("2.1");
 
-        versionInfo.setActiveVersion(activeVersion);
-        when(versioningManager.getEntityVersionInfo(anyString(), anyString(),anyString(), any()))
-                .thenReturn(versionInfo);
-       actionManager.updateAction(action, "user");
+            versionInfo.setActiveVersion(activeVersion);
+            when(versioningManager.getEntityVersionInfo(anyString(), anyString(),anyString(), any()))
+                    .thenReturn(versionInfo);
+            actionManager.updateAction(action, "user");
+        });
     }
 
     @Test
@@ -236,16 +243,17 @@ public class ActionManagerImplTest {
 
     }
 
-    @Test(expected = ActionException.class)
-    public void testCheckoutShouldFailInCaseOfException() {
-        String invariantUuId = "invariantUuId";
-        Mockito.when(versioningManager.checkout(anyString(), anyString(),anyString()))
-                .thenThrow(new CoreException(new ErrorCode.ErrorCodeBuilder()
-                        .withId(VersioningErrorCodes.CHECKOT_ON_LOCKED_ENTITY).build()));
-        VersionInfoEntity versionInfoEntity = createVersionInfoEntity();
-        when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
-        actionManager.checkout(invariantUuId, "user");
-
+    @Test
+    public void testCheckoutShouldFailInCaseOfException() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            String invariantUuId = "invariantUuId";
+            Mockito.when(versioningManager.checkout(anyString(), anyString(),anyString()))
+                    .thenThrow(new CoreException(new ErrorCode.ErrorCodeBuilder()
+                            .withId(VersioningErrorCodes.CHECKOT_ON_LOCKED_ENTITY).build()));
+            VersionInfoEntity versionInfoEntity = createVersionInfoEntity();
+            when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
+            actionManager.checkout(invariantUuId, "user");
+        });
     }
 
     @Test
@@ -261,11 +269,12 @@ public class ActionManagerImplTest {
         Mockito.verify(actionArtifactDao, times(1)).delete(any(ActionArtifactEntity.class));
     }
 
-    @Test(expected = ActionException.class)
-    public void testUndoCheckoutShouldThrowExceptionIfVersionInfoEntityIsNull() {
-        when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(null);
-        actionManager.undoCheckout("invariantUuid", "user");
-
+    @Test
+    public void testUndoCheckoutShouldThrowExceptionIfVersionInfoEntityIsNull() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(null);
+            actionManager.undoCheckout("invariantUuid", "user");
+        });
     }
 
     @Test
@@ -277,12 +286,14 @@ public class ActionManagerImplTest {
         Mockito.verify(actionDao, times(1)).update(Matchers.any(ActionEntity.class));
     }
 
-    @Test(expected = ActionException.class)
-    public void testCheckinShouldShouldThrowExceptionInCaseOfAnyException() {
-        when(versioningManager.checkin(anyString(), anyString(), anyString(), Matchers.any()))
-                .thenThrow((new CoreException(new ErrorCode.ErrorCodeBuilder()
-                        .withId(VersioningErrorCodes.CHECKIN_ON_UNLOCKED_ENTITY).build())));
-        actionManager.checkin("invariantUuid", "user");
+    @Test
+    public void testCheckinShouldShouldThrowExceptionInCaseOfAnyException() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            when(versioningManager.checkin(anyString(), anyString(), anyString(), Matchers.any()))
+                    .thenThrow((new CoreException(new ErrorCode.ErrorCodeBuilder()
+                            .withId(VersioningErrorCodes.CHECKIN_ON_UNLOCKED_ENTITY).build())));
+            actionManager.checkin("invariantUuid", "user");
+        });
     }
 
     @Test
@@ -296,12 +307,14 @@ public class ActionManagerImplTest {
         Mockito.verify(actionDao, times(1)).update(Matchers.any(ActionEntity.class));
     }
 
-    @Test(expected = ActionException.class)
-    public void testSubmitShouldThrowExceptionForAnyException() {
-        when(versioningManager.submit(anyString(), anyString(), anyString(), Matchers.any()))
-                .thenThrow((new CoreException(new ErrorCode.ErrorCodeBuilder()
-                        .withId(VersioningErrorCodes.SUBMIT_FINALIZED_ENTITY_NOT_ALLOWED).build())));
-        actionManager.submit("invariantUuid", "user");
+    @Test
+    public void testSubmitShouldThrowExceptionForAnyException() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            when(versioningManager.submit(anyString(), anyString(), anyString(), Matchers.any()))
+                    .thenThrow((new CoreException(new ErrorCode.ErrorCodeBuilder()
+                            .withId(VersioningErrorCodes.SUBMIT_FINALIZED_ENTITY_NOT_ALLOWED).build())));
+            actionManager.submit("invariantUuid", "user");
+        });
     }
 
 
@@ -314,11 +327,12 @@ public class ActionManagerImplTest {
         Assert.assertNotNull(actionManager.downloadArtifact("actionUuId", "artifactUuId"));
     }
 
-    @Test(expected = ActionException.class)
-    public void testDownloadArtifactShouldThrowExceptionIfActionIsNull() {
-
-        when(actionDao.getActionsByActionUuId(anyString())).thenReturn(null);
-        actionManager.downloadArtifact("actionUuId", "artifactUuId");
+    @Test
+    public void testDownloadArtifactShouldThrowExceptionIfActionIsNull() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            when(actionDao.getActionsByActionUuId(anyString())).thenReturn(null);
+            actionManager.downloadArtifact("actionUuId", "artifactUuId");
+        });
     }
 
     @Test
@@ -338,17 +352,18 @@ public class ActionManagerImplTest {
 
     }
 
-    @Test(expected = ActionException.class)
-    public void testUploadArtifactShouldThrowExceptionIfArtifactAlreadyExist() {
-        ActionArtifact artifact = createActionArtifact();
-        VersionInfo versionInfo = createVersionInfo();
-        Version activeVersion = new Version("2.1");
-        versionInfo.setActiveVersion(activeVersion);
-        when(versioningManager.getEntityVersionInfo(anyString(), anyString(),anyString(), any()))
-                .thenReturn(versionInfo);
-        when(actionDao.get(any())).thenReturn(createActionEntity());
-        actionManager.uploadArtifact(artifact, "actionInvariantUuId", "user");
-
+    @Test
+    public void testUploadArtifactShouldThrowExceptionIfArtifactAlreadyExist() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            ActionArtifact artifact = createActionArtifact();
+            VersionInfo versionInfo = createVersionInfo();
+            Version activeVersion = new Version("2.1");
+            versionInfo.setActiveVersion(activeVersion);
+            when(versioningManager.getEntityVersionInfo(anyString(), anyString(),anyString(), any()))
+                    .thenReturn(versionInfo);
+            when(actionDao.get(any())).thenReturn(createActionEntity());
+            actionManager.uploadArtifact(artifact, "actionInvariantUuId", "user");
+        });
     }
 
     @Test
@@ -365,10 +380,12 @@ public class ActionManagerImplTest {
         Mockito.verify(actionArtifactDao, times(1)).delete(any(ActionArtifactEntity.class));
     }
 
-    @Test(expected = ActionException.class)
-    public void testDeleteArtifactShouldThrowExceptionIfArtifactMetaDataIsNull() {
-        when(actionDao.getLockedAction(anyString(), anyString())).thenReturn(createAction());
-        actionManager.deleteArtifact("actionInvariantUuId", "86B2B1049CC13B4E9275414DBB29485C", "user" );
+    @Test
+    public void testDeleteArtifactShouldThrowExceptionIfArtifactMetaDataIsNull() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            when(actionDao.getLockedAction(anyString(), anyString())).thenReturn(createAction());
+            actionManager.deleteArtifact("actionInvariantUuId", "86B2B1049CC13B4E9275414DBB29485C", "user" );
+        });
     }
 
     @Test
@@ -384,17 +401,19 @@ public class ActionManagerImplTest {
         Mockito.verify(actionArtifactDao, times(1)).updateArtifact(any(ActionArtifact.class));
     }
 
-    @Test(expected = ActionException.class)
-    public void testUpdateArtifactShouldThrowExceptionIfArtifactNotExist() {
-        ActionArtifact artifact = createActionArtifact();
-        artifact.setArtifactUuId("Uuid");
-        VersionInfo versionInfo = createVersionInfo();
-        Version activeVersion = new Version("2.1");
-        versionInfo.setActiveVersion(activeVersion);
-        when(actionDao.get(any())).thenReturn(createActionEntity());
-        when(versioningManager.getEntityVersionInfo(anyString(), anyString(),anyString(), any()))
-                .thenReturn(versionInfo);
-        actionManager.updateArtifact(artifact, "actionInvariantUuId", "user");
+    @Test
+    public void testUpdateArtifactShouldThrowExceptionIfArtifactNotExist() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            ActionArtifact artifact = createActionArtifact();
+            artifact.setArtifactUuId("Uuid");
+            VersionInfo versionInfo = createVersionInfo();
+            Version activeVersion = new Version("2.1");
+            versionInfo.setActiveVersion(activeVersion);
+            when(actionDao.get(any())).thenReturn(createActionEntity());
+            when(versioningManager.getEntityVersionInfo(anyString(), anyString(),anyString(), any()))
+                    .thenReturn(versionInfo);
+            actionManager.updateArtifact(artifact, "actionInvariantUuId", "user");
+        });
     }
 
     private ActionArtifact createActionArtifact() {

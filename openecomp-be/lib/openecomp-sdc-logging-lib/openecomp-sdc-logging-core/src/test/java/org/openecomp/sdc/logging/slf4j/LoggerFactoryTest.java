@@ -17,6 +17,7 @@
 package org.openecomp.sdc.logging.slf4j;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.Test;
 import org.openecomp.sdc.logging.api.Logger;
@@ -46,13 +47,17 @@ public class LoggerFactoryTest {
         assertEquals(CLASS_NAME, logger.getName());
     }
 
-    @Test(expected = NullPointerException.class)
-    public void throwNpeWhenGetByNameWithNull() {
-        LoggerFactory.getLogger((String) null);
+    @Test
+    public void throwNpeWhenGetByNameWithNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            LoggerFactory.getLogger((String) null);
+        });
     }
 
-    @Test(expected = NullPointerException.class)
-    public void throwNpeWhenGetByClassWithNull() {
-        LoggerFactory.getLogger((Class<LoggerFactoryTest>) null);
+    @Test
+    public void throwNpeWhenGetByClassWithNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            LoggerFactory.getLogger((Class<LoggerFactoryTest>) null);
+        });
     }
 }

@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.mockito.ArgumentCaptor;
 import org.onap.logging.ref.slf4j.ONAPLogConstants.ResponseStatus;
 import org.openecomp.sdc.logging.api.AuditData;
@@ -39,28 +40,36 @@ import org.openecomp.sdc.logging.api.Logger;
  */
 public class AuditTrackerTest {
 
-    @Test(expected = NullPointerException.class)
-    public void throwExceptionWhenLoggerNull() {
-        new AuditTracker((Logger) null);
+    @Test
+    public void throwExceptionWhenLoggerNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            new AuditTracker((Logger) null);
+        });
     }
 
-    @Test(expected = NullPointerException.class)
-    public void throwExceptionWhenResourceTypeNull() {
-        new AuditTracker((Class<?>) null);
+    @Test
+    public void throwExceptionWhenResourceTypeNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            new AuditTracker((Class<?>) null);
+        });
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void throwExceptionWhenPreRequestCalledMoreThanOnce() {
-        AuditTracker tracker = new AuditTracker(mock(Logger.class));
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        tracker.preRequest(request);
-        tracker.preRequest(request);
+    @Test
+    public void throwExceptionWhenPreRequestCalledMoreThanOnce() throws Exception {
+        assertThrows(IllegalStateException.class, () -> {
+            AuditTracker tracker = new AuditTracker(mock(Logger.class));
+            HttpServletRequest request = mock(HttpServletRequest.class);
+            tracker.preRequest(request);
+            tracker.preRequest(request);
+        });
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void throwExceptionWhenRreRequestNeverCalled() {
-        AuditTracker tracker = new AuditTracker(mock(Logger.class));
-        tracker.postRequest(mock(RequestProcessingResult.class));
+    @Test
+    public void throwExceptionWhenRreRequestNeverCalled() throws Exception {
+        assertThrows(IllegalStateException.class, () -> {
+            AuditTracker tracker = new AuditTracker(mock(Logger.class));
+            tracker.postRequest(mock(RequestProcessingResult.class));
+        });
     }
 
     @Test

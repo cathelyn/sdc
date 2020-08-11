@@ -40,9 +40,11 @@ public class LoggingContextTest {
                 impl.getClass().getName());
     }
 
-    @Test(expected = NullPointerException.class)
-    public void throwNpeWhenContextIsNull() {
-        LoggingContext.put(null);
+    @Test
+    public void throwNpeWhenContextIsNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            LoggingContext.put(null);
+        });
     }
 
     @Test
@@ -56,9 +58,11 @@ public class LoggingContextTest {
         assertSame(test, LoggingContext.copyToRunnable(test));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void throwNpeWhenToRunnableWithNull() {
-        LoggingContext.copyToRunnable(null);
+    @Test
+    public void throwNpeWhenToRunnableWithNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            LoggingContext.copyToRunnable(null);
+        });
     }
 
     @Test
@@ -67,8 +71,10 @@ public class LoggingContextTest {
         assertSame(test, LoggingContext.copyToCallable(test));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void throwNpeWhenToCallableWithNull() {
-        LoggingContext.copyToCallable(null);
+    @Test
+    public void throwNpeWhenToCallableWithNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            LoggingContext.copyToCallable(null);
+        });
     }
 }

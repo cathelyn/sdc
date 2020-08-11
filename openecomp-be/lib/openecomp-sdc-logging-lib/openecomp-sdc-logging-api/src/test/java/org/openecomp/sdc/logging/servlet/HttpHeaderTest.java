@@ -18,6 +18,7 @@ package org.openecomp.sdc.logging.servlet;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,24 +38,32 @@ public class HttpHeaderTest {
     private static final Supplier<? extends Throwable> VALUE_EXPECTED = () -> new AssertionError("Value expected");
     private static final Function<String, String> NULL_WHEN_NAME_NOT_B = k -> "B".equals(k) ? "Value" : null;
 
-    @Test(expected = NullPointerException.class)
-    public void throwExceptionWhenInputArrayNull() {
-        new HttpHeader((String[]) null);
+    @Test
+    public void throwExceptionWhenInputArrayNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            new HttpHeader((String[]) null);
+        });
     }
 
-    @Test(expected = NullPointerException.class)
-    public void throwExceptionWhenInputListNull() {
-        new HttpHeader((List<String>) null);
+    @Test
+    public void throwExceptionWhenInputListNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            new HttpHeader((List<String>) null);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void throwExceptionWhenInputArrayEmpty() {
-        new HttpHeader();
+    @Test
+    public void throwExceptionWhenInputArrayEmpty() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new HttpHeader();
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void throwExceptionWhenInputListEmpty() {
-        new HttpHeader(Collections.emptyList());
+    @Test
+    public void throwExceptionWhenInputListEmpty() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new HttpHeader(Collections.emptyList());
+        });
     }
 
     @Test

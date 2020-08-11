@@ -124,7 +124,7 @@ public class PermissionsRulesImplTest {
 
   @Test
   public void testExecuteActionInvalidAction() throws Exception {
-    CoreExpection thrown = assertThrows(CoreException.class, () -> {
+    CoreException thrown = assertThrows(CoreException.class, () -> {
       permissionsRules.executeAction(ITEM1_ID,USER1_ID,INVALID_ACTION);
     });
 

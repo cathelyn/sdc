@@ -27,6 +27,7 @@ import org.openecomp.core.dao.types.UniqueValueEntity;
 import org.openecomp.sdc.common.errors.CoreException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;;
 import org.junit.jupiter.api.Test;
 
@@ -54,13 +55,16 @@ public class UniqueValueUtilTest {
         Mockito.verify(uniqueValueDao, Mockito.times(1)).create(Mockito.any());
     }
 
-    @Test(expectedExceptions = CoreException.class)
-    public void testCreateUniqueValueNotUnique() {
-        Mockito.when(uniqueValueDao.get(Mockito.any())).thenReturn(new UniqueValueEntity());
-        uniqueValueUtil.createUniqueValue(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME);
+    @Test
+    public void testCreateUniqueValueNotUnique() throws Exception{
+        assertThrows(CoreException.class, () -> {
+            Mockito.when(uniqueValueDao.get(Mockito.any())).thenReturn(new UniqueValueEntity());
+            uniqueValueUtil.createUniqueValue(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME);
 
-        Mockito.verify(uniqueValueDao, Mockito.times(1)).create(Mockito.any());
+            Mockito.verify(uniqueValueDao, Mockito.times(1)).create(Mockito.any());
+        });
     }
+
 
     @Test
     public void testDeleteUniqueValue() {
@@ -96,11 +100,13 @@ public class UniqueValueUtilTest {
     }
 
     @Test(expectedExceptions = CoreException.class)
-    public void testValidateUniqueValueNotUnique() {
-        Mockito.when(uniqueValueDao.get(Mockito.any())).thenReturn(new UniqueValueEntity());
-        uniqueValueUtil.createUniqueValue(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME);
+    public void testValidateUniqueValueNotUnique() throws Exception{
+        assertThrows(CoreException.class, () -> {
+            Mockito.when(uniqueValueDao.get(Mockito.any())).thenReturn(new UniqueValueEntity());
+            uniqueValueUtil.createUniqueValue(ENTITLEMENT_POOL_NAME, ORIGINAL_ENTITY_NAME);
 
-        Mockito.verify(uniqueValueDao, Mockito.times(1)).get(Mockito.any());
+            Mockito.verify(uniqueValueDao, Mockito.times(1)).get(Mockito.any());
+        });
     }
 
     @Test

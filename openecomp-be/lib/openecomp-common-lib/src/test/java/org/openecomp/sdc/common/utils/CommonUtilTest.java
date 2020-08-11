@@ -79,9 +79,10 @@ public class CommonUtilTest {
 
             FileContentHandler fch = CommonUtil.validateAndUploadFileContent(OnboardingTypesEnum.ZIP, file);
 
+            fail("Should throw CoreException");
         });
 
-        fail("Should throw CoreException");
+
     }
 
     @Test

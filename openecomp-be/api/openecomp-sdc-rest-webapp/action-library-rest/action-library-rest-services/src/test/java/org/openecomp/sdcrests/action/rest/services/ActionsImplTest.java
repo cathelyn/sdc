@@ -90,7 +90,7 @@ public class ActionsImplTest {
 
     @Test
     public void testGetActionsByActionInvariantUuIdShouldThrowExceptionWhenActionIsEmpty() throws Exception {
-        assertThrows(CoreException.class, () -> {
+        assertThrows(ActionException.class, () -> {
             when(request.getQueryString()).thenReturn("queryString");
             when(actionManager.getActionsByActionUuId(anyString())).thenReturn(new Action());
 
@@ -109,7 +109,7 @@ public class ActionsImplTest {
 
     @Test
     public void testGetOpenEcompComponentsShouldCatchActionException() throws Exception {
-        assertThrows(CoreException.class, () -> {
+        assertThrows(ActionException.class, () -> {
             when(actionManager.getOpenEcompComponents()).thenThrow(new ActionException());
             action.getOpenEcompComponents(request).getStatus();
         });
@@ -176,7 +176,7 @@ public class ActionsImplTest {
 
     @Test
     public void testGetFilteredActionsShouldThrowActionExceptionWhenNumberOfFiltersAreZero() throws Exception {
-        assertThrows(CoreException.class, () -> {
+        assertThrows(ActionException.class, () -> {
             when(request.getQueryString()).thenReturn("queryString");
             when(actionManager.getFilteredActions(anyString(), anyString())).thenReturn(mockActionsToReturn());
             action.getFilteredActions(null, null, null, null,
@@ -194,7 +194,7 @@ public class ActionsImplTest {
 
     @Test
     public void testCreateActionShouldFailForInvalidRequestJson() throws Exception {
-        assertThrows(CoreException.class, () -> {
+        assertThrows(ActionException.class, () -> {
             String requestJson = "{actionUuId : actionUuId, actionInvariantUuId : actionInvariantUuId," +
                     "  version: 2.1 }";
             when(actionManager.createAction(any(Action.class), anyString())).thenReturn(createAction());
@@ -215,7 +215,7 @@ public class ActionsImplTest {
 
     @Test
     public void testUpdateActionShouldThrowActionExceptionWhenActionManagerUpdateFails() throws Exception {
-        assertThrows(CoreException.class, () -> {
+        assertThrows(ActionException.class, () -> {
             String requestJson = "{actionUuId : actionUuId, actionInvariantUuId : actionInvariantUuId," +
                     " name : actionToUpdate, version: 2.2 }";
 
@@ -269,7 +269,7 @@ public class ActionsImplTest {
 
     @Test
     public void testActOnActionShouldThrowActionExceptionWhenPassingInvalidAction() throws Exception {
-        assertThrows(CoreException.class, () -> {
+        assertThrows(ActionException.class, () -> {
             String requestJson = "{status : Status}";
             when(request.getRemoteUser()).thenReturn("remoteUser");
             action.actOnAction("invariantUUID", requestJson, request);
@@ -295,14 +295,15 @@ public class ActionsImplTest {
         Assert.assertEquals(200, response.getStatus());
     }
 
-    @Test(expected = ActionException.class)
+    @Test
     public void testUploadArtifactShouldThrowActionExceptionWhenArtifactToUploadIsNull() throws IOException {
-        when(request.getContentType()).thenReturn("contentType");
-        action.uploadArtifact("actionInvariantUUID", "artifactName", "artifactLabel",
-                "artifactCategory", "artifactDescription", "readOnly",
-                "d41d8cd98f00b204e9800998ecf8427e",
-                null, request);
-
+        assertThrows(ActionException.class, () -> {
+            when(request.getContentType()).thenReturn("contentType");
+            action.uploadArtifact("actionInvariantUUID", "artifactName", "artifactLabel",
+                    "artifactCategory", "artifactDescription", "readOnly",
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    null, request);
+        });
     }
 
     @Test
@@ -317,11 +318,12 @@ public class ActionsImplTest {
         Assert.assertEquals(200, response.getStatus());
     }
 
-    @Test(expected = ActionException.class)
-    public void testDownloadArtifactShouldThrowActionExceptionWhenReDownloadedArtifactIsEmpty() {
-
-        when(actionManager.downloadArtifact(anyString(), anyString())).thenReturn(new ActionArtifact());
-        action.downloadArtifact("actionUUID", "artifactUUID", request);
+    @Test
+    public void testDownloadArtifactShouldThrowActionExceptionWhenReDownloadedArtifactIsEmpty() throws Exception {
+        assertThrows(ActionException.class, () -> {
+            when(actionManager.downloadArtifact(anyString(), anyString())).thenReturn(new ActionArtifact());
+            action.downloadArtifact("actionUUID", "artifactUUID", request);
+        });
     }
 
     @Test
@@ -350,21 +352,21 @@ public class ActionsImplTest {
     }
 
 
-    @Test(expected = ActionException.class)
+    @Test
     public void testUpdateArtifactShouldThrowActionExceptionWhenCheckSumDidNotMatchWithCalculatedCheckSum() throws IOException {
+        assertThrows(ActionException.class, () -> {
+            Attachment artifactToUpdate = new Attachment("id", "mediaType", new Object());
+            DataSource dataSource = new AttachmentDataSource("ctParam", new ByteArrayInputStream(new byte[0]));
+            DataHandler dataHandler = new DataHandler(dataSource);
+            artifactToUpdate.setDataHandler(dataHandler);
 
-        Attachment artifactToUpdate = new Attachment("id", "mediaType", new Object());
-        DataSource dataSource = new AttachmentDataSource("ctParam", new ByteArrayInputStream(new byte[0]));
-        DataHandler dataHandler = new DataHandler(dataSource);
-        artifactToUpdate.setDataHandler(dataHandler);
-
-        when(request.getContentType()).thenReturn("contentType");
-        action.updateArtifact("actionInvariantUUID", "artifactUUID", "artifactName",
-                "artifactLabel",
-                "artifactCategory", "artifactDescription", "readWrite",
-                "checksum",
-                artifactToUpdate, request);
-
+            when(request.getContentType()).thenReturn("contentType");
+            action.updateArtifact("actionInvariantUUID", "artifactUUID", "artifactName",
+                    "artifactLabel",
+                    "artifactCategory", "artifactDescription", "readWrite",
+                    "checksum",
+                    artifactToUpdate, request);
+        });
     }
 
     private List<Action> mockActionsToReturn() {

@@ -60,9 +60,11 @@ public class NotificationsServiceImplTest {
         verify(notificationsDao, times(1)).update(any());
     }
 
-    @Test(expected = NotificationNotExistException.class)
+    @Test
     public void shouldThrowExceptionIfOwnerIdAndNotificationIdDontRelate() throws Exception {
-        doReturn(null).when(notificationsDao).get(any());
-        notificationsService.markAsRead("ownerId", UUID.randomUUID().toString());
+        assertThrows(NotificationNotExistException.class, () -> {
+            doReturn(null).when(notificationsDao).get(any());
+            notificationsService.markAsRead("ownerId", UUID.randomUUID().toString());
+        });
     }
 }

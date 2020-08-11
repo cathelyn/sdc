@@ -28,15 +28,20 @@ public class VersionTest {
         Assert.assertEquals(1, version.getMinor());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testValueOfWihLengthOne() {
-        Version version = Version.valueOf("1");
+    @Test
+    public void testValueOfWihLengthOne() throws Exception{
+        assertThrows(IllegalArgumentException.class, () -> {
+            Version version = Version.valueOf("1");
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testValueOfNegative() {
-        Version version = Version.valueOf("1a.1");
+    @Test
+    public void testValueOfNegative() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Version version = Version.valueOf("1a.1");
+        });
     }
+
     @Test
     public void testValueOfNullVersion() {
         Version version = Version.valueOf(null);

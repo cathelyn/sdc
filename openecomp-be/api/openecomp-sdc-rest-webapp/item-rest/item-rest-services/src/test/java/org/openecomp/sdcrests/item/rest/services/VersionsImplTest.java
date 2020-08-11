@@ -20,6 +20,7 @@
 package org.openecomp.sdcrests.item.rest.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.openecomp.sdcrests.item.types.VersionAction.Clean;
 import static org.openecomp.sdcrests.item.types.VersionAction.Commit;
 import static org.openecomp.sdcrests.item.types.VersionAction.Reset;

@@ -20,6 +20,7 @@
 package org.openecomp.sdc.validation.impl;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -36,9 +37,12 @@ public class UploadValidationManagerImplTest {
         assertNotNull(validationFileResponse.getValidationData());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void shouldNotValidateNonHeatFile() throws IOException {
-        UploadValidationManagerImpl uploadValidationManager = new UploadValidationManagerImpl();
-        uploadValidationManager.validateFile("txt", new ByteArrayInputStream( "test".getBytes() ));
+        assertThrows(RuntimeException.class, () -> {
+            UploadValidationManagerImpl uploadValidationManager = new UploadValidationManagerImpl();
+            uploadValidationManager.validateFile("txt", new ByteArrayInputStream( "test".getBytes() ));
+        });
     }
+
 }

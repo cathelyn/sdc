@@ -23,6 +23,7 @@ package org.openecomp.sdc.vendorlicense.impl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.mockito.*;
 import org.openecomp.sdc.activitylog.dao.type.ActivityLogEntity;
 import org.openecomp.sdc.vendorlicense.VendorLicenseConstants;
@@ -141,9 +142,11 @@ public class VendorLicenseModelTest {
     verify(vendorLicenseFacadeMcok).getVendorLicenseModel(vlm1_id, VERSION01);
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void testDeleteVLMUnsupportedOperation() {
-    vendorLicenseManager.deleteVendorLicenseModel(vlm1_id, null); // TODO: 8/13/2017
+  @Test
+  public void testDeleteVLMUnsupportedOperation() throws Exception {
+    assertThrows(UnsupportedOperationException.class, () -> {
+      vendorLicenseManager.deleteVendorLicenseModel(vlm1_id, null); // TODO: 8/13/2017
+    });
   }
 
 

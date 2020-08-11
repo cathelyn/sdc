@@ -25,7 +25,7 @@ import org.openecomp.sdc.notification.services.NotificationPropagationManager;
 import org.openecomp.sdc.notification.services.SubscriptionService;
 import org.openecomp.sdc.versioning.AsdcItemManager;
 import org.openecomp.sdc.versioning.types.Item;
-import import org.junit.jupiter.api.BeforeEach;;
+import org.junit.jupiter.api.BeforeEach;;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;

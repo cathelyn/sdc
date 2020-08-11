@@ -22,6 +22,7 @@ package org.openecomp.sdc.vendorsoftwareproduct.impl;
 
 import org.junit.After;
 import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
@@ -92,10 +93,12 @@ public class ComponentManagerImplTest {
     Assert.assertEquals(components.size(), 0);
   }
 
-  @Test(expected = CoreException.class)
-  public void validateExceptionWhenTryingToRetriveNotExistingComponentEntity() {
-    doReturn(null).when(componentDaoMock).get(any());
-    componentManager.validateComponentExistence(VSP_ID, VERSION, COMP1_ID);
+  @Test
+  public void validateExceptionWhenTryingToRetriveNotExistingComponentEntity() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      doReturn(null).when(componentDaoMock).get(any());
+      componentManager.validateComponentExistence(VSP_ID, VERSION, COMP1_ID);
+    });
   }
 
   @Test
@@ -338,9 +341,11 @@ public class ComponentManagerImplTest {
         VendorSoftwareProductErrorCodes.VSP_COMPOSITION_EDIT_NOT_ALLOWED);
   }
 
-  @Test(expected = CoreException.class)
+  @Test
   public void testGetNonExistingComponentQuestionnaire() throws Exception {
-    componentManager.getQuestionnaire(VSP_ID, VERSION, COMP1_ID);
+    assertThrows(CoreException.class, () -> {
+      componentManager.getQuestionnaire(VSP_ID, VERSION, COMP1_ID);
+    });
   }
 
   @Test
@@ -389,10 +394,12 @@ public class ComponentManagerImplTest {
     Assert.assertNull(questionnaire.getErrorMessage());
   }
 
-  @Test(expected = CoreException.class)
+  @Test
   public void testUpdateNonExistingComponentQuestionnaire() throws Exception {
-    doReturn(null).when(componentDaoMock).get(any());
-    componentManager.updateQuestionnaire(VSP_ID, VERSION, COMP1_ID, "questionnaire data");
+    assertThrows(CoreException.class, () -> {
+      doReturn(null).when(componentDaoMock).get(any());
+      componentManager.updateQuestionnaire(VSP_ID, VERSION, COMP1_ID, "questionnaire data");
+    });
   }
 
   @Test

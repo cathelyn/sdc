@@ -22,6 +22,7 @@ package org.openecomp.sdc.vendorsoftwareproduct.impl;
 
 import org.junit.After;
 import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -140,17 +141,19 @@ public class ComputeManagerImplTest {
     verify(computeDao).create(expected);
   }
 
-  @Test(expected = CoreException.class)
-  public void testCreateManualComputeWithDuplicateName() {
-    ComputeEntity expected = createCompute(VSP_ID, VERSION, COMPONENT_ID, COMPUTE1_ID);
-    doReturn(true).when(vspInfoDao).isManual(any(), any());
+  @Test
+  public void testCreateManualComputeWithDuplicateName() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      ComputeEntity expected = createCompute(VSP_ID, VERSION, COMPONENT_ID, COMPUTE1_ID);
+      doReturn(true).when(vspInfoDao).isManual(any(), any());
 
-    doThrow(new CoreException(
-        new ErrorCode.ErrorCodeBuilder().withCategory(ErrorCategory.APPLICATION).build()))
-        .when(computeManager).validateUniqueName(VSP_ID, VERSION, COMPONENT_ID,
-        expected.getComputeCompositionData().getName());
+      doThrow(new CoreException(
+              new ErrorCode.ErrorCodeBuilder().withCategory(ErrorCategory.APPLICATION).build()))
+              .when(computeManager).validateUniqueName(VSP_ID, VERSION, COMPONENT_ID,
+              expected.getComputeCompositionData().getName());
 
-    computeManager.createCompute(expected);
+      computeManager.createCompute(expected);
+    });
   }
 
   @Test

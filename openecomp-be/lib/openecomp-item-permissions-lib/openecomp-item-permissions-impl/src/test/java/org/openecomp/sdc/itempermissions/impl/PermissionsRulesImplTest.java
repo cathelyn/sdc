@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,7 @@ import org.openecomp.sdc.common.errors.CoreException;
 import org.openecomp.sdc.itempermissions.dao.impl.PermissionsServicesImpl;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -63,16 +63,21 @@ public class PermissionsRulesImplTest {
     MockitoAnnotations.initMocks(this);
   }
 
-  @Test(expectedExceptions = CoreException.class,expectedExceptionsMessageRegExp =
-      "Invalid permission type")
-  public void testIsAllowedWhenInvalidPermission() {
+  @Test
+  public void testIsAllowedWhenInvalidPermission() throws Exception {
+    CoreException thrown = assertThrows(CoreException.class, () -> {
       permissionsRules.isAllowed(INVALID_PERMISSION, EDIT_ACTION);
-    }
+    });
 
-  @Test(expectedExceptions = CoreException.class,expectedExceptionsMessageRegExp =
-      "Invalid action type")
-  public void testIsAllowedWhenInvalidAction() {
-    permissionsRules.isAllowed(PERMISSION_CONTRIBUTOR, INVALID_ACTION);
+    assertTrue(thrown.getMessage().contains("Invalid permission type"));
+  }
+
+  @Test(expectedExceptionsMessageRegExp =
+          "Invalid action type")
+  public void testIsAllowedWhenInvalidAction() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      permissionsRules.isAllowed(PERMISSION_CONTRIBUTOR, INVALID_ACTION);
+    });
   }
 
   @Test
@@ -105,15 +110,17 @@ public class PermissionsRulesImplTest {
     assertTrue(permissionsRules.isAllowed(PERMISSION_OWNER,CHANGE_PERMISSIONS_ACTION));
   }
 
-  @Test(expectedExceptions = CoreException.class,expectedExceptionsMessageRegExp =
-      "Invalid permission type")
-  public void testUpdatePermissionWhenInvalidPermission()  {
-    permissionsRules.updatePermission(ITEM1_ID,USER1_ID,INVALID_PERMISSION,new HashSet<String>(),
-        new HashSet<String>());
+  @Test(expectedExceptionsMessageRegExp =
+          "Invalid permission type")
+  public void testUpdatePermissionWhenInvalidPermission() throws Exception {
+    assertThrows(CoreException.class, () -> {
+      permissionsRules.updatePermission(ITEM1_ID,USER1_ID,INVALID_PERMISSION,new HashSet<String>(),
+              new HashSet<String>());
+    });
   }
 
   @Test(expectedExceptions = CoreException.class,expectedExceptionsMessageRegExp =
-      "Invalid action type")
+          "Invalid action type")
   public void testExecuteActionInvalidAction(){
     permissionsRules.executeAction(ITEM1_ID,USER1_ID,INVALID_ACTION);
   }

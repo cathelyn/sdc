@@ -23,7 +23,7 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.openecomp.sdc.common.session.SessionContextProvider;
 import org.junit.jupiter.api.Assertions.assertTrue;
-import import org.junit.jupiter.api.BeforeEach;;
+import org.junit.jupiter.api.BeforeEach;;
 import org.junit.jupiter.api.Test;
 
 public class SessionContextProviderFactoryImplTest {

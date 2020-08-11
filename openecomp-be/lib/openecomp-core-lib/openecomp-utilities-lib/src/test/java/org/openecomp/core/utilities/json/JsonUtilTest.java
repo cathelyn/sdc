@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.sun.tools.classfile.RuntimeTypeAnnotations_attribute;
 import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;

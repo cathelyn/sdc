@@ -27,7 +27,7 @@ import org.openecomp.core.dao.types.UniqueValueEntity;
 import org.openecomp.sdc.common.errors.CoreException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import import org.junit.jupiter.api.BeforeEach;;
+import org.junit.jupiter.api.BeforeEach;;
 import org.junit.jupiter.api.Test;
 
 public class UniqueValueUtilTest {

@@ -21,6 +21,7 @@
 package org.openecomp.sdc.notification.services.impl;
 
 import org.junit.Before;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

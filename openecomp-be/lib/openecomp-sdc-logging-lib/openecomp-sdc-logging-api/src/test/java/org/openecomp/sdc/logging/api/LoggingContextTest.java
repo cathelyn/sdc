@@ -18,6 +18,7 @@ package org.openecomp.sdc.logging.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.Callable;

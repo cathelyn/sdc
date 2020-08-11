@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 
@@ -72,13 +73,15 @@ public class MulticastDestinationTest {
         assertFalse(actualSubscribers.contains(excludedSubscriber));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void shouldThrowUnsupportedOperationExceptionWhenTryingToChangeSubscribersList() throws
         Exception {
-        doReturn(subscribers).when(subscriptionServiceMock).getSubscribers(any());
-        multicastDestination =
-            new MulticastDestination("aa", subscriptionServiceMock, excludedSubscriber);
-        List<String> actualSubscribers = multicastDestination.getSubscribers();
-        actualSubscribers.add("sss");
+        assertThrows(UnsupportedOperationException.class, () -> {
+            doReturn(subscribers).when(subscriptionServiceMock).getSubscribers(any());
+            multicastDestination =
+                    new MulticastDestination("aa", subscriptionServiceMock, excludedSubscriber);
+            List<String> actualSubscribers = multicastDestination.getSubscribers();
+            actualSubscribers.add("sss");
+        });
     }
 }

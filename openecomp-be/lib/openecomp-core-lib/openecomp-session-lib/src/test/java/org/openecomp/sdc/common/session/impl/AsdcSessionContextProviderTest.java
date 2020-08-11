@@ -25,6 +25,7 @@ import org.openecomp.sdc.common.errors.CoreException;
 import org.openecomp.sdc.common.session.SessionContext;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,16 +41,20 @@ public class AsdcSessionContextProviderTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test(expectedExceptions = CoreException.class)
-    public void testGetUserIdNull() {
-        asdcSessionContextProvider.create(null, null);
-        asdcSessionContextProvider.get();
+    @Test
+    public void testGetUserIdNull() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            asdcSessionContextProvider.create(null, null);
+            asdcSessionContextProvider.get();
+        });
     }
 
-    @Test(expectedExceptions = CoreException.class)
-    public void testGetTenantNull() {
-        asdcSessionContextProvider.create(USER_ID, null);
-        asdcSessionContextProvider.get();
+    @Test
+    public void testGetTenantNull() throws  Exception {
+        assertThrows(CoreException.class, () -> {
+            asdcSessionContextProvider.create(USER_ID, null);
+            asdcSessionContextProvider.get();
+                });
     }
 
     @Test

@@ -24,6 +24,7 @@ import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.mockito.Mock;
 import org.openecomp.sdc.asdctool.migration.core.DBVersion;
 import org.openecomp.sdc.be.dao.jsongraph.JanusGraphDao;
@@ -64,9 +65,11 @@ public class ForwardPathMigrationTest {
         assertThat(dbVersion,Is.is(forwardPathMigration.getVersion()));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testMigrate() {
-        assertThat(forwardPathMigration,IsNull.notNullValue());
-        forwardPathMigration.migrate();
+    @Test
+    public void testMigrate()  throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            assertThat(forwardPathMigration,IsNull.notNullValue());
+            forwardPathMigration.migrate();
+        });
     }
 }

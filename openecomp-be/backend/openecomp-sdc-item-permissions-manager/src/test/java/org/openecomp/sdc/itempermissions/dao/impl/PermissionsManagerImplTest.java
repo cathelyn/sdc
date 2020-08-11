@@ -27,6 +27,9 @@ import org.openecomp.sdc.versioning.AsdcItemManager;
 import org.openecomp.sdc.versioning.types.Item;
 import org.junit.jupiter.api.BeforeEach;;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -77,14 +80,18 @@ public class PermissionsManagerImplTest {
     MockitoAnnotations.initMocks(this);
   }
 
-  @Test(expectedExceptions = CoreException.class, expectedExceptionsMessageRegExp = "Permissions " +
-          "Error. The user does not have permission to perform this action.")
-  public void testUpdateItemPermissionsWhenNotAllowed() {
-    doReturn(false).when(permissionsServicesMock).isAllowed(ITEM1_ID, USER, ACTION);
+  @Test
+  public void testUpdateItemPermissionsWhenNotAllowed() throws Exception {
+    CoreException thrown = assertThrows(CoreException.class, () -> {
+      doReturn(false).when(permissionsServicesMock).isAllowed(ITEM1_ID, USER, ACTION);
 
-    permissionsManager
-            .updateItemPermissions(ITEM1_ID, PERMISSION, Collections.singleton(AFFECTED_USER1),
-                    new HashSet<>());
+      permissionsManager
+              .updateItemPermissions(ITEM1_ID, PERMISSION, Collections.singleton(AFFECTED_USER1),
+                      new HashSet<>());
+    });
+
+    assertTrue(thrown.getMessage().contains("Permissions " +
+            "Error. The user does not have permission to perform this action."));
   }
 
   @Test

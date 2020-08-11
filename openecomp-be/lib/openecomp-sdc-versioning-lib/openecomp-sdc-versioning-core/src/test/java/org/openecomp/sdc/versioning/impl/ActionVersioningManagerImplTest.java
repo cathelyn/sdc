@@ -26,6 +26,7 @@ import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -171,17 +172,18 @@ public class ActionVersioningManagerImplTest {
         assertThat(result, notNullValue());
     }
 
-    @Test(expected = CoreException.class)
-    public void testCreateFailed() {
-        when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(new VersionInfoEntity());
+    @Test    public void testCreateFailed() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(new VersionInfoEntity());
 
-        actionVersioningManager.create(
-                "mock-type",
-                "mock-id",
-                "mock-user"
-        );
+            actionVersioningManager.create(
+                    "mock-type",
+                    "mock-id",
+                    "mock-user"
+            );
 
-        fail("Should throw CoreException");
+            fail("Should throw CoreException");
+        });
     }
 
     @Test
@@ -226,20 +228,22 @@ public class ActionVersioningManagerImplTest {
         verify(versionInfoDao).delete(any(VersionInfoEntity.class));
     }
 
-    @Test(expected = CoreException.class)
-    public void testDeleteLocked() {
-        versionInfoEntity.setStatus(VersionStatus.Locked);
-        UserCandidateVersion userCandidateVersion = new UserCandidateVersion("mock-user", new Version());
-        versionInfoEntity.setCandidate(userCandidateVersion);
+    @Test
+    public void testDeleteLocked() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            versionInfoEntity.setStatus(VersionStatus.Locked);
+            UserCandidateVersion userCandidateVersion = new UserCandidateVersion("mock-user", new Version());
+            versionInfoEntity.setCandidate(userCandidateVersion);
 
-        when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
+            when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
 
-        actionVersioningManager.delete(
-                "moct-type",
-                "mock-id",
-                "mock-user"
-        );
-        fail("Should throw CoreException");
+            actionVersioningManager.delete(
+                    "moct-type",
+                    "mock-id",
+                    "mock-user"
+            );
+            fail("Should throw CoreException");
+        });
     }
 
     @Test
@@ -256,17 +260,19 @@ public class ActionVersioningManagerImplTest {
         verify(versionInfoDeletedDao).delete(any(VersionInfoDeletedEntity.class));
     }
 
-    @Test(expected = CoreException.class)
-    public void testUndoDeleteFail() {
-        when(versionInfoDeletedDao.get(any(VersionInfoDeletedEntity.class))).thenReturn(null);
+    @Test
+    public void testUndoDeleteFail() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            when(versionInfoDeletedDao.get(any(VersionInfoDeletedEntity.class))).thenReturn(null);
 
-        actionVersioningManager.undoDelete(
-                "mock-type",
-                "mock-id",
-                "mock-user"
-        );
+            actionVersioningManager.undoDelete(
+                    "mock-type",
+                    "mock-id",
+                    "mock-user"
+            );
 
-        fail("Should throw CoreException");
+            fail("Should throw CoreException");
+        });
     }
 
     @Test
@@ -285,32 +291,36 @@ public class ActionVersioningManagerImplTest {
         assertThat(result.getStatus(), is(VersionStatus.Draft));
     }
 
-    @Test(expected = CoreException.class)
-    public void testCheckoutFailNotFound() {
-        when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(null);
+    @Test
+    public void testCheckoutFailNotFound() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(null);
 
-        actionVersioningManager.checkout(
-                "moct-type",
-                "mock-id",
-                "mock-user"
-        );
+            actionVersioningManager.checkout(
+                    "moct-type",
+                    "mock-id",
+                    "mock-user"
+            );
 
-        fail("Should throw CoreException");
+            fail("Should throw CoreException");
+        });
     }
 
-    @Test(expected = CoreException.class)
-    public void testCheckoutLockedFail() {
-        versionInfoEntity.setStatus(VersionStatus.Locked);
+    @Test
+    public void testCheckoutLockedFail() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            versionInfoEntity.setStatus(VersionStatus.Locked);
 
-        when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
+            when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
 
-        actionVersioningManager.checkout(
-                "mock-type",
-                "mock-id",
-                "mock-user"
-        );
+            actionVersioningManager.checkout(
+                    "mock-type",
+                    "mock-id",
+                    "mock-user"
+            );
 
-        fail("Should throw CoreException");
+            fail("Should throw CoreException");
+        });
     }
 
     @Test
@@ -342,19 +352,21 @@ public class ActionVersioningManagerImplTest {
         assertThat(result, notNullValue(Version.class));
     }
 
-    @Test(expected = CoreException.class)
-    public void testCheckinDraft() {
-        versionInfoEntity.setStatus(VersionStatus.Draft);
+    @Test
+    public void testCheckinDraft() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            versionInfoEntity.setStatus(VersionStatus.Draft);
 
-        when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
+            when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
 
-        Version result = actionVersioningManager.checkin(
-                "mock-type",
-                "mock-id",
-                "mock-user",
-                "mock-desc"
-        );
-        assertThat(result, notNullValue(Version.class));
+            Version result = actionVersioningManager.checkin(
+                    "mock-type",
+                    "mock-id",
+                    "mock-user",
+                    "mock-desc"
+            );
+            assertThat(result, notNullValue(Version.class));
+        });
     }
 
     @Test
@@ -389,48 +401,54 @@ public class ActionVersioningManagerImplTest {
         assertThat(result, notNullValue(Version.class));
     }
 
-    @Test(expected = CoreException.class)
-    public void testSubmitAltFailNotFound() {
-        when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(null);
+    @Test
+    public void testSubmitAltFailNotFound() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(null);
 
-        actionVersioningManager.submit(
-                "mock-type",
-                "mock-id",
-                "mock-user",
-                "mock-desc"
-        );
+            actionVersioningManager.submit(
+                    "mock-type",
+                    "mock-id",
+                    "mock-user",
+                    "mock-desc"
+            );
 
-        fail("Should throw CoreException");
+            fail("Should throw CoreException");
+        });
     }
 
-    @Test(expected = CoreException.class)
-    public void testSubmitAltFailCertified() {
-        versionInfoEntity.setStatus(VersionStatus.Certified);
-        when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
+    @Test
+    public void testSubmitAltFailCertified() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            versionInfoEntity.setStatus(VersionStatus.Certified);
+            when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
 
-        actionVersioningManager.submit(
-                "mock-type",
-                "mock-id",
-                "mock-user",
-                "mock-desc"
-        );
+            actionVersioningManager.submit(
+                    "mock-type",
+                    "mock-id",
+                    "mock-user",
+                    "mock-desc"
+            );
 
-        fail("Should throw CoreException");
+            fail("Should throw CoreException");
+        });
     }
 
-    @Test(expected = CoreException.class)
-    public void testSubmitAltFailLocked() {
-        versionInfoEntity.setStatus(VersionStatus.Locked);
-        when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
+    @Test
+    public void testSubmitAltFailLocked() throws Exception {
+        assertThrows(CoreException.class, () -> {
+            versionInfoEntity.setStatus(VersionStatus.Locked);
+            when(versionInfoDao.get(any(VersionInfoEntity.class))).thenReturn(versionInfoEntity);
 
-        actionVersioningManager.submit(
-                "mock-type",
-                "mock-id",
-                "mock-user",
-                "mock-desc"
-        );
+            actionVersioningManager.submit(
+                    "mock-type",
+                    "mock-id",
+                    "mock-user",
+                    "mock-desc"
+            );
 
-        fail("Should throw CoreException");
+            fail("Should throw CoreException");
+        });
     }
 
     @Test

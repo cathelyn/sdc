@@ -20,6 +20,7 @@ package org.openecomp.sdc.versioning;
 
 import org.junit.Assert;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertion.assertThrows;
 import org.openecomp.sdc.common.errors.CoreException;
 import org.openecomp.sdc.versioning.dao.types.Version;
 import org.openecomp.sdc.versioning.types.VersionInfo;

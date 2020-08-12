@@ -40,7 +40,7 @@ public class DBVersionTest {
         };
     }
 
-    @ParametrizedTest
+    @ParameterizedTest
     @MethodSource(invalidVersionStringsProvider)
     public void testFromString_invalidVersionString(String invalidVersion) throws Exception {
         assertThrows(MigrationException.class, () -> {

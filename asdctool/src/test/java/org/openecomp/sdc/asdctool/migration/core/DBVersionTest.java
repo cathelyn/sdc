@@ -22,10 +22,12 @@ package org.openecomp.sdc.asdctool.migration.core;
 
 import org.testng.annotations.DataProvider;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.params.ParameterizedTest;
+
 
 public class DBVersionTest {
 
@@ -41,7 +43,7 @@ public class DBVersionTest {
     }
 
     @ParameterizedTest
-    @MethodSource(invalidVersionStringsProvider)
+    @MethodSource("invalidVersionStringsProvider")
     public void testFromString_invalidVersionString(String invalidVersion) throws Exception {
         assertThrows(MigrationException.class, () -> {
             DBVersion.fromString(invalidVersion);

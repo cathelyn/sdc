@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.openecomp.sdc.vendorlicense.dao.types.VendorLicenseModelEntity;
 import org.openecomp.sdcrests.vendorlicense.types.VendorLicenseModelEntityDto;
-import org.junit.jupiet.api.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class MapVendorLicenseModelEntityToDtoTest {

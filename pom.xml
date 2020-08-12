@@ -165,7 +165,8 @@ Modifications copyright (c) 2018-2019 Nokia
 
     <java.driver.core.version>4.5.1</java.driver.core.version>
 
-    <org.springframework-version>4.2.5.RELEASE</org.springframework-version>
+    <org.springframework-version>4.2.5.RELEASE</org.springframework-version> <!-- wanted Spring version -->
+    <hibernate.version>5.1.0.Final</hibernate.version> <!-- wanted Hibernate version -->
 
   </properties>
 

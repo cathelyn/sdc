@@ -60,7 +60,8 @@ public class DBVersionTest {
         };
     }
 
-    @Test(dataProvider = "validVersionStringsProvider")
+    @ParameterizedTest
+    @MethodSource("validVersionStringsProvider")
     public void testFromString(String validString, String expectedVersionString) {
         assertEquals(expectedVersionString, DBVersion.fromString(validString).toString());
     }
@@ -77,7 +78,9 @@ public class DBVersionTest {
         };
     }
 
-    @Test(dataProvider = "versionComparisionProvider")
+
+    @ParameterizedTest
+    @MethodSource("versionComparisionProvider")
     public void testVersionCompareTo2(String firstVersion, String otherVersion, int expectedComparisionResult) {
         assertEquals(DBVersion.fromString(firstVersion).compareTo(DBVersion.fromString(otherVersion)), expectedComparisionResult);
     }

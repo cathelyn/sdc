@@ -56,7 +56,7 @@ public class VLMExtractTest {
 
     @Test
     public void failToExtractVLMBecauseJsonIsCorrupted() throws Exception {
-        assertthrows(IllegalStateException.class, () -> {
+        assertThrows(IllegalStateException.class, () -> {
             String elemenet_info_string = "gfhhhghgh";
             assertNull(new CustomExportSerializer().extractVlm(elemenet_info_string));
         });

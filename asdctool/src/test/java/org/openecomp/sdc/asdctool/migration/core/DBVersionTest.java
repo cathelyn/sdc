@@ -24,6 +24,7 @@ import org.testng.annotations.DataProvider;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DBVersionTest {
 
@@ -38,9 +39,11 @@ public class DBVersionTest {
         };
     }
 
-    @Test(dataProvider = "invalidVersionStringsProvider", expectedExceptions = MigrationException.class)
-    public void testFromString_invalidVersionString(String invalidVersion) {
-        DBVersion.fromString(invalidVersion);
+    @Test(dataProvider = "invalidVersionStringsProvider")
+    public void testFromString_invalidVersionString(String invalidVersion) throws Exception {
+        assertThrows(MigrationException.class, () -> {
+            DBVersion.fromString(invalidVersion);
+        });
     }
 
     @DataProvider(name = "validVersionStringsProvider")

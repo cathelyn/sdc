@@ -61,8 +61,7 @@ public class DBVersionTest {
     public void testFromString(String validString, String expectedVersionString) {
         assertEquals(expectedVersionString, DBVersion.fromString(validString).toString());
     }
-
-    @DataProvider(name = "versionComparisionProvider")
+    
     public static Object[][] versionComparisionProvider() {
         return new Object[][] {
                 {"1.1", "001.00001", 0},
